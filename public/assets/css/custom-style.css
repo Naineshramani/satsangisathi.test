@@ -1,0 +1,63 @@
+/*your custom css goes here*/
+
+/* Fix slider images not filling full height in home hero carousel */
+.aiz-carousel-full .slick-list,
+.aiz-carousel-full .slick-track,
+.aiz-carousel-full .slick-slide,
+.aiz-carousel-full .slick-slide > div {
+    height: 100%;
+}
+.aiz-carousel-full .slick-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+
+
+/* Transparent top navbar on homepage only — sub-nav row stays white */
+body.home-page .aiz-header {
+    background: transparent !important;
+    box-shadow: none !important;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+body.home-page .aiz-header.nav-scrolled {
+    background: #fff !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
+}
+/* Keep the sub-nav (Dashboard / My Profile / tabs) always on a white strip */
+body.home-page .aiz-header .border-top {
+    background: #fff !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Nav auth buttons (Log In / Registration) hover pop effect */
+.nav-auth-btn {
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    display: inline-flex !important;
+    align-items: center;
+}
+.nav-auth-btn:hover {
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    text-decoration: none;
+}
+
+/* Uploader grid */
+.aiz-uploader-all { min-height: 200px; padding: 12px; overflow-y: auto; }
+
+/* Upload tile — first card in grid */
+.aiz-upload-tile {
+    border: 2px dashed #d0d0d0 !important;
+    background: #fafafa !important;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    display: flex !important;
+    flex-direction: column;
+    text-decoration: none;
+}
+.aiz-upload-tile:hover,
+.aiz-upload-tile.is-dragging {
+    border-color: #e9a820 !important;
+    background: #fffbf2 !important;
+}
