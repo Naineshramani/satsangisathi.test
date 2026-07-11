@@ -22,6 +22,15 @@
                     </a>
                 </li>
 
+                @can('analytics_dashboard')
+                <li class="aiz-side-nav-item">
+                    <a href="{{ route('analytics_dashboard.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['analytics_dashboard.index']) }}">
+                        <i class="las la-chart-pie aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{ translate('Analytics Dashboard') }}</span>
+                    </a>
+                </li>
+                @endcan
+
                 @can('support_lookup')
                 <li class="aiz-side-nav-item">
                     <a href="{{ route('support_lookup.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['support_lookup.index']) }}">
