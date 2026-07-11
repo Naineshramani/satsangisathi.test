@@ -49,6 +49,21 @@
 
                                                 <h2 class="h6 fw-600 fs-18 text-truncate mb-1">
                                                     {{ $user->first_name . ' ' . $user->last_name }}</h2>
+                                                @php
+                                                    $card_address = $user->addresses->where('type', 'present')->first();
+                                                    $card_city    = $card_address->city->name ?? null;
+                                                    $card_country = $card_address->country->name ?? null;
+                                                @endphp
+                                                @if($card_city || $card_country)
+                                                <div class="mb-1 fs-18 text-truncate">
+                                                    {{ implode(' - ', array_filter([$card_city, $card_country])) }}
+                                                </div>
+                                                @endif
+                                                @if(!empty($user->satsang_details->follower_of_sect_id))
+                                                <div class="mb-1 fs-18 text-truncate">
+                                                    {{ $user->satsang_details->followerOfSect->name }}
+                                                </div>
+                                                @endif
                                                 <div class="mb-2 fs-12">
                                                     <span class="opacity-60">{{ translate('Member ID: ') }}</span>
                                                     <span class="ml-4 text-primary">{{ $user->code }}</span>
@@ -59,39 +74,18 @@
                                                             <span>{{ translate('Age') }}</span>
                                                         </td>
                                                         <td class="py-1 w-25 fw-700 text-dark">
-                                                            {{ \Carbon\Carbon::parse($user->member->birthday)->age }}</td>
-                                                        <td class="py-1 w-25"><span>{{ translate('Height') }}</span></td>
+                                                            {{ \Carbon\Carbon::parse($user->member->birthday)->age }}
+                                                        </td>
+                                                        <td class="py-1 w-25"><span>{{ translate('Caste') }}</span></td>
                                                         <td class="py-1 w-25 fw-700 text-dark">
-                                                            @if (!empty($user->physical_attributes->height))
-                                                                {{ $user->physical_attributes->height }}
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="py-1"><span>{{ translate('Religion') }}</span></td>
-                                                        <td class="py-1 fw-700 text-dark">
-                                                            @if (!empty($user->spiritual_backgrounds->religion_id))
-                                                                {{ $user->spiritual_backgrounds->religion->name }}
-                                                            @endif
-                                                        </td>
-                                                        <td class="py-1"><span>{{ translate('Caste') }}</span></td>
-                                                        <td class="py-1 fw-700 text-dark">
                                                             @if (!empty($user->spiritual_backgrounds->caste_id))
                                                                 {{ $user->spiritual_backgrounds->caste->name }}
                                                             @endif
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="py-1"><span>{{ translate('First Language') }}</span>
-                                                        </td>
-                                                        <td class="py-1 fw-700 text-dark">
-                                                            @if ($user->member->mothere_tongue != null)
-                                                                {{ \App\Models\MemberLanguage::where('id', $user->member->mothere_tongue)->first()->name }}
-                                                            @endif
-                                                        </td>
-                                                        <td class="py-1"><span>{{ translate('Marital Status') }}</span>
-                                                        </td>
-                                                        <td class="py-1 fw-700 text-dark">
+                                                        <td class="py-1"><span>{{ translate('Marital Status') }}</span></td>
+                                                        <td class="py-1 fw-700 text-dark" colspan="3">
                                                             {{ $user->member->marital_status != null ? $user->member->marital_status->name : '' }}
                                                         </td>
                                                     </tr>
@@ -107,18 +101,6 @@
                                                         <td class="py-1 fw-700 text-dark">
                                                             @if($user->career->count() > 0)
                                                                 {{ $user->career->where('present', 1)->first()->designation ?? $user->career->last()->designation }}
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                    
-                                                    <tr>
-                                                        <td class="py-1"><span>{{ translate('Location') }}</span></td>
-                                                        <td class="py-1 fw-700 text-dark">
-                                                            @php
-                                                                $present_address = $user->addresses->where('type', 'present')->first();
-                                                            @endphp
-                                                            @if (!empty($present_address->country_id))
-                                                                {{ $present_address->country->name }}
                                                             @endif
                                                         </td>
                                                     </tr>

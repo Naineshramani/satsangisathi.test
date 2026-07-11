@@ -1,25 +1,87 @@
 @extends('frontend.layouts.member_panel')
 @section('panel_content')
-    <!-- Contact Details — read-only -->
+    <!-- Contact Details -->
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0 h6">{{ translate('Contact Details') }}</h5>
         </div>
         <div class="card-body">
-            <div class="form-group row mb-0">
-                <div class="col-md-6">
-                    <label>{{ translate('Phone Number') }}</label>
-                    <div class="form-control bg-light d-flex align-items-center" style="color:#888;">
-                        <i class="las la-lock mr-2"></i> {{ Auth::user()->phone ?? '—' }}
+            @php
+                $fatherMobile = Auth::user()->father_mobile ?? '';
+                $motherMobile = Auth::user()->mother_mobile ?? '';
+                // Split stored E.164 number into country code + number for display
+                $fatherCC  = '91'; $fatherNum = '';
+                if ($fatherMobile && str_starts_with($fatherMobile, '+')) {
+                    preg_match('/^\+(\d{1,3})(\d+)$/', $fatherMobile, $fm);
+                    $fatherCC = $fm[1] ?? '91'; $fatherNum = $fm[2] ?? '';
+                } elseif ($fatherMobile) { $fatherNum = ltrim($fatherMobile, '+'); }
+                $motherCC  = '91'; $motherNum = '';
+                if ($motherMobile && str_starts_with($motherMobile, '+')) {
+                    preg_match('/^\+(\d{1,3})(\d+)$/', $motherMobile, $mm);
+                    $motherCC = $mm[1] ?? '91'; $motherNum = $mm[2] ?? '';
+                } elseif ($motherMobile) { $motherNum = ltrim($motherMobile, '+'); }
+                $primaryContact = Auth::user()->primary_contact ?? 'candidate';
+            @endphp
+            <form action="{{ route('member.contact_details_update') }}" method="POST">
+                @csrf
+                {{-- Locked fields --}}
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label>{{ translate('Candidate Mobile No') }}</label>
+                        <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                            <span>{{ Auth::user()->phone ?? '—' }}</span><i class="las la-lock ml-2"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>{{ translate('Email Address') }}</label>
+                        <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                            <span>{{ Auth::user()->email ?? '—' }}</span><i class="las la-lock ml-2"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <label>{{ translate('Email Address') }}</label>
-                    <div class="form-control bg-light d-flex align-items-center" style="color:#888;">
-                        <i class="las la-lock mr-2"></i> {{ Auth::user()->email ?? '—' }}
+
+                {{-- Father's Mobile --}}
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label>{{ translate("Father's Mobile No") }}</label>
+                        <input type="tel" id="father_phone_input" class="form-control" name="father_mobile" value="{{ $fatherNum }}" placeholder="{{ translate('Father Mobile Number') }}" autocomplete="off">
+                        <input type="hidden" name="father_country_code" id="father_country_code" value="{{ $fatherCC }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label>{{ translate("Mother's Mobile No") }}</label>
+                        <input type="tel" id="mother_phone_input" class="form-control" name="mother_mobile" value="{{ $motherNum }}" placeholder="{{ translate('Mother Mobile Number') }}" autocomplete="off">
+                        <input type="hidden" name="mother_country_code" id="mother_country_code" value="{{ $motherCC }}">
                     </div>
                 </div>
-            </div>
+
+                {{-- Primary Contact --}}
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <label class="fw-600">{{ translate('Primary Contact Number') }}</label>
+                        <div class="d-flex flex-wrap" style="gap:16px;">
+                            <label class="aiz-checkbox">
+                                <input type="radio" name="primary_contact" value="candidate" {{ $primaryContact == 'candidate' ? 'checked' : '' }}>
+                                <span class="opacity-60">{{ translate('Candidate No') }} <small class="text-muted">({{ Auth::user()->phone ?? '—' }})</small></span>
+                                <span class="aiz-rounded-check"></span>
+                            </label>
+                            <label class="aiz-checkbox">
+                                <input type="radio" name="primary_contact" value="father" {{ $primaryContact == 'father' ? 'checked' : '' }}>
+                                <span class="opacity-60" id="primary_father_label">{{ translate("Father's No") }} <small class="text-muted">({{ $fatherMobile ?: '—' }})</small></span>
+                                <span class="aiz-rounded-check"></span>
+                            </label>
+                            <label class="aiz-checkbox">
+                                <input type="radio" name="primary_contact" value="mother" {{ $primaryContact == 'mother' ? 'checked' : '' }}>
+                                <span class="opacity-60" id="primary_mother_label">{{ translate("Mother's No") }} <small class="text-muted">({{ $motherMobile ?: '—' }})</small></span>
+                                <span class="aiz-rounded-check"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -126,15 +188,25 @@
     <!-- Basic Information -->
     @include('frontend.member.profile.basic_info')
 
-    <!-- Present Address -->
+    <!-- Address Information (Present + Permanent + Native merged) -->
     @php
         $present_address      = \App\Models\Address::where('type','present')->where('user_id',$member->id)->first();
         $present_country_id   = $present_address->country_id ?? "";
         $present_state_id     = $present_address->state_id ?? "";
         $present_city_id      = $present_address->city_id ?? "";
         $present_postal_code  = $present_address->postal_code ?? "";
+        $permanent_address    = \App\Models\Address::where('type','permanent')->where('user_id',$member->id)->first();
+        $permanent_country_id = $permanent_address->country_id ?? "";
+        $permanent_state_id   = $permanent_address->state_id ?? "";
+        $permanent_city_id    = $permanent_address->city_id ?? "";
+        $permanent_postal_code= $permanent_address->postal_code ?? "";
+        $native_address       = \App\Models\Address::where('type','native')->where('user_id',$member->id)->first();
+        $native_country_id    = $native_address->country_id ?? "";
+        $native_state_id      = $native_address->state_id ?? "";
+        $native_city_id       = $native_address->city_id ?? "";
+        $native_village       = $native_address->native_village ?? "";
     @endphp
-    @if(get_setting('member_present_address_section') == 'on')
+    @if(get_setting('member_present_address_section') == 'on' || get_setting('member_permanent_address_section') == 'on')
       @include('frontend.member.profile.present_address')
     @endif
 
@@ -196,17 +268,7 @@
       @include('frontend.member.profile.astronomic_information')
     @endif
 
-    <!-- Permanent Address -->
-    @php
-        $permanent_address      = \App\Models\Address::where('type','permanent')->where('user_id',$member->id)->first();
-        $permanent_country_id   = $permanent_address->country_id ?? "";
-        $permanent_state_id     = $permanent_address->state_id ?? "";
-        $permanent_city_id      = $permanent_address->city_id ?? "";
-        $permanent_postal_code  = $permanent_address->postal_code ?? "";
-    @endphp
-    @if(get_setting('member_permanent_address_section') == 'on')
-      @include('frontend.member.profile.permanent_address')
-    @endif
+    {{-- Permanent address merged into Address Information section above --}}
 
     <!-- Family Information -->
     @if(get_setting('member_family_information_section') == 'on')
@@ -255,11 +317,40 @@
 @section('script')
 <script type="text/javascript">
 
+    // Father & Mother phone intlTelInput
+    function initContactIti(inputId, ccId, dialCode) {
+        var el = document.getElementById(inputId);
+        if (!el) return;
+        var iti = intlTelInput(el, {
+            initialCountry: 'in',
+            separateDialCode: true,
+            utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}",
+            onlyCountries: @php echo json_encode(\App\Models\Country::where('status', 1)->pluck('code')->toArray()) @endphp,
+        });
+        // Set saved country by dial code
+        if (dialCode) {
+            iti.setNumber('+' + dialCode + el.value);
+            document.getElementById(ccId).value = iti.getSelectedCountryData().dialCode;
+        }
+        el.addEventListener('countrychange', function () {
+            document.getElementById(ccId).value = iti.getSelectedCountryData().dialCode;
+        });
+        // On form submit strip the dial code prefix from the visible input
+        el.closest('form').addEventListener('submit', function () {
+            document.getElementById(ccId).value = iti.getSelectedCountryData().dialCode;
+            el.value = iti.getNumber().replace('+' + iti.getSelectedCountryData().dialCode, '').trim();
+        });
+    }
+
     $(document).ready(function(){
+        initContactIti('father_phone_input', 'father_country_code', '{{ $fatherCC }}');
+        initContactIti('mother_phone_input', 'mother_country_code', '{{ $motherCC }}');
         get_states_by_country_for_present_address();
         get_cities_by_state_for_present_address();
         get_states_by_country_for_permanent_address();
         get_cities_by_state_for_permanent_address();
+        get_states_by_country_for_native_address();
+        get_cities_by_state_for_native_address();
         get_castes_by_religion_for_member();
         get_sub_castes_by_caste_for_member();
         get_castes_by_religion_for_partner();
@@ -368,6 +459,43 @@
     $('#permanent_state_id').on('change', function() {
         get_cities_by_state_for_permanent_address();
     });
+
+    // For native address
+    function get_states_by_country_for_native_address(){
+        var native_country_id = $('#native_country_id').val();
+        $.post('{{ route('states.get_state_by_country') }}',{_token:'{{ csrf_token() }}', country_id:native_country_id}, function(data){
+            $('#native_state_id').html(null);
+            for (var i = 0; i < data.length; i++) {
+                $('#native_state_id').append($('<option>', { value: data[i].id, text: data[i].name }));
+            }
+            $("#native_state_id > option").each(function() {
+                if(this.value == '{{$native_state_id}}'){
+                    $("#native_state_id").val(this.value).change();
+                }
+            });
+            AIZ.plugins.bootstrapSelect('refresh');
+            get_cities_by_state_for_native_address();
+        });
+    }
+
+    function get_cities_by_state_for_native_address(){
+        var native_state_id = $('#native_state_id').val();
+        $.post('{{ route('cities.get_cities_by_state') }}',{_token:'{{ csrf_token() }}', state_id:native_state_id}, function(data){
+            $('#native_city_id').html(null);
+            for (var i = 0; i < data.length; i++) {
+                $('#native_city_id').append($('<option>', { value: data[i].id, text: data[i].name }));
+            }
+            $("#native_city_id > option").each(function() {
+                if(this.value == '{{$native_city_id}}'){
+                    $("#native_city_id").val(this.value).change();
+                }
+            });
+            AIZ.plugins.bootstrapSelect('refresh');
+        });
+    }
+
+    $('#native_country_id').on('change', function() { get_states_by_country_for_native_address(); });
+    $('#native_state_id').on('change', function() { get_cities_by_state_for_native_address(); });
 
     // get castes and subcastes For member
     function get_castes_by_religion_for_member(){
@@ -627,5 +755,26 @@
             initDatepicker(maxDate);
         });
     });
+
+    // Scroll back to section after form submit
+    (function () {
+        var savedSection = sessionStorage.getItem('profileSection');
+        if (savedSection) {
+            sessionStorage.removeItem('profileSection');
+            var el = document.getElementById(savedSection);
+            if (el) {
+                setTimeout(function () {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 200);
+            }
+        }
+
+        document.querySelectorAll('[id^="sec-"] form').forEach(function (form) {
+            form.addEventListener('submit', function () {
+                var card = this.closest('[id^="sec-"]');
+                if (card) sessionStorage.setItem('profileSection', card.id);
+            });
+        });
+    })();
 </script>
 @endsection

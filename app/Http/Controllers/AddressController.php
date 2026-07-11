@@ -72,6 +72,61 @@ class AddressController extends Controller
      public function update(Request $request, $id)
      {
          $address_type = $request->address_type;
+
+         if ($address_type == 'both') {
+             $rules = [
+                 'present_country_id'    => ['required'],
+                 'present_state_id'      => ['required'],
+                 'present_city_id'       => ['required'],
+                 'permanent_country_id'  => ['required'],
+                 'permanent_state_id'    => ['required'],
+                 'permanent_city_id'     => ['required'],
+             ];
+             $messages = [
+                 'present_country_id.required'   => translate('Present Country is required'),
+                 'present_state_id.required'     => translate('Present State is required'),
+                 'present_city_id.required'      => translate('Present City is required'),
+                 'permanent_country_id.required' => translate('Permanent Country is required'),
+                 'permanent_state_id.required'   => translate('Permanent State is required'),
+                 'permanent_city_id.required'    => translate('Permanent City is required'),
+             ];
+             $validator = Validator::make($request->all(), $rules, $messages);
+             if ($validator->fails()) {
+                 flash(translate('Something went wrong'))->error();
+                 return Redirect::back()->withErrors($validator);
+             }
+
+             foreach (['present', 'permanent'] as $type) {
+                 $address = Address::where('user_id', $id)->where('type', $type)->first();
+                 if (empty($address)) {
+                     $address = new Address;
+                     $address->user_id = $id;
+                     $address->type    = $type;
+                 }
+                 $address->country_id  = $request->{$type . '_country_id'};
+                 $address->state_id    = $request->{$type . '_state_id'};
+                 $address->city_id     = $request->{$type . '_city_id'};
+                 $address->postal_code = $request->{$type . '_postal_code'};
+                 $address->save();
+             }
+
+             // Native address
+             $native = Address::where('user_id', $id)->where('type', 'native')->first();
+             if (empty($native)) {
+                 $native = new Address;
+                 $native->user_id = $id;
+                 $native->type    = 'native';
+             }
+             $native->country_id     = $request->native_country_id ?: null;
+             $native->state_id       = $request->native_state_id ?: null;
+             $native->city_id        = $request->native_city_id ?: null;
+             $native->native_village = $request->native_village ?: null;
+             $native->save();
+
+             flash(translate('Address info has been updated successfully'))->success();
+             return back();
+         }
+
          if($address_type == 'present'){
              $this->rules = [
                  'present_country_id'   => [ 'required'],
@@ -127,8 +182,7 @@ class AddressController extends Controller
              $address->city_id      = $request->permanent_city_id;
              $address->postal_code  = $request->permanent_postal_code;
          }
-         $address->type             = $address_type;
-
+         $address->type = $address_type;
 
          if($address->save()){
              flash(translate('Address info has been updated successfully'))->success();

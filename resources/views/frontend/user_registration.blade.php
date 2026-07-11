@@ -252,6 +252,16 @@
 								<span class="invalid-feedback" role="alert">{{ $message }}</span>
 							@enderror
 
+							<div class="mb-3">
+								<label class="aiz-checkbox">
+									<input type="checkbox" name="whatsapp_consent" value="1">
+									<span class="opacity-60">
+										<i class="lab la-whatsapp text-success fs-18 mr-1"></i>{{ translate('Allow WhatsApp updates & notifications') }}
+									</span>
+									<span class="aiz-square-check"></span>
+								</label>
+							</div>
+
 							<div class="mb-5">
 								<button type="submit" id="createAccountBtn" class="btn btn-block btn-primary">{{ translate('Create Account') }}</button>
 							</div>

@@ -76,9 +76,9 @@
                             <div class="text-center">
                                 @if ($package->id != 1)
                                     @if(Auth::check())
-                                        <a href="{{ route('package_payment_methods', encrypt($package->id)) }}" type="submit" class="btn btn-primary" >{{translate('Purchase This Package')}}</a>
+                                        <a href="{{ route('package_payment_methods', encrypt($package->id)) }}" type="submit" class="btn btn-primary" >{{translate('Activate')}}</a>
                                     @else
-                                        <button type="submit" onclick="loginModal()" class="btn btn-primary" >{{translate('Purchase This Package')}}</button>
+                                        <button type="submit" onclick="loginModal()" class="btn btn-primary" >{{translate('Activate')}}</button>
                                     @endif
                                 @elseif($package->id == 1 && $user->has_purchased_free_package == 0)
                                     @if(Auth::check())

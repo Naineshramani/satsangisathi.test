@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-family">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Family Information')}}</h5>
     </div>
@@ -39,14 +39,16 @@
                     @enderror
                 </div>
     
-                {{-- sibling --}}
-                {{-- <div class="col-md-6 mt-3">
-                    <label for="sibling">{{translate('Sibling')}}</label>
-                    <input type="text" name="sibling" value="{{ $member->families->sibling ?? "" }}" id="sibling" class="form-control" placeholder="{{translate('Sibling')}}" readonly >
-                    @error('sibling')
+                {{-- About parents --}}
+                <div class="col-md-12 mt-3">
+                    <label for="about_parents">{{translate('About Parents')}}</label>
+                    <textarea name="about_parents" rows="4" placeholder="{{ translate('About Parents') }}" class="form-control">{{ $member->families->about_parents ?? "" }}</textarea>
+                    @error('about_parents')
                         <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
-                </div> --}}
+                </div>
+
+                {{-- sibling --}}
                 <div class="col-md-6 mt-3">
                     <label for="sibling">{{translate('No. of Brothers')}}</label>
                     <select class="form-control aiz-selectpicker" name="no_of_brothers" id="no_of_brothers" onchange="totalSibling()" data-live-search="true" data-selected="{{ $member->families->no_of_brothers ?? ""  }}">
@@ -70,32 +72,17 @@
                     @enderror
                 </div>
     
-                {{-- About parents --}}
-                <div class="col-md-12 mt-3">
-                    <label for="mother">{{translate('About Parents')}}</label>
-                    <textarea type="text" name="about_parents" value="{{ $member->families->about_parents ?? "" }}" rows="4" placeholder="{{ translate('About Parents') }}" class="form-control">{{ $member->families->about_parents ?? "" }}</textarea>
-                    @error('about_parents')
-                        <small class="form-text text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-    
                 {{-- About Siblings --}}
                 <div class="col-md-12 mt-3">
                     <label for="mother">{{translate('About Siblings')}}</label>
-                    <textarea type="text" name="about_siblings" value="{{ $member->families->about_siblings ?? "" }}" rows="4" placeholder="{{ translate('About Siblings') }}" class="form-control">{{ $member->families->about_siblings ?? "" }}</textarea>
+                    <textarea type="text" name="about_siblings" value="{{ $member->families->about_siblings ?? "" }}" rows="4" placeholder="{{ translate('e.g. Elder brother, age 32, B.Tech, Married, working as Engineer. Younger sister, age 26, MBA, Unmarried.') }}" class="form-control">{{ $member->families->about_siblings ?? "" }}</textarea>
                     @error('about_siblings')
                         <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
                 </div>
     
-                {{-- About Relatives --}}
-                <div class="col-md-12 mt-3">
-                    <label for="mother">{{translate('About Relatives')}}</label>
-                    <textarea type="text" name="about_relatives" value="{{ $member->families->about_relatives ?? "" }}" rows="4" placeholder="{{ translate('About Parents') }}" class="form-control">{{ $member->families->about_relatives ?? "" }}</textarea>
-                    @error('about_relatives')
-                        <small class="form-text text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+                {{-- About Relatives — hidden --}}
+                <input type="hidden" name="about_relatives" value="{{ $member->families->about_relatives ?? '' }}">
             </div>
             <div class="text-right">
                 <button type="submit" class="btn btn-primary btn-sm">{{translate('Update')}}</button>

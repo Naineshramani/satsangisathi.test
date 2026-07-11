@@ -1,17 +1,18 @@
-<div class="card">
+<div class="card" id="sec-education">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Education Info')}}</h5>
-        <div class="text-right">
-            <a onclick="education_add_modal('{{$member->id}}');"  href="javascript:void(0);" class="btn btn-sm btn-primary ">
-              <i class="las mr-1 la-plus"></i>
-              {{translate('Add New')}}
-            </a>
-        </div>
     </div>
     <div class="card-body">
+        <div class="text-right mb-2">
+            <a onclick="education_add_modal('{{$member->id}}');" href="javascript:void(0);" class="btn btn-sm btn-add-new">
+                <i class="las mr-1 la-plus"></i>
+                {{translate('Add New')}}
+            </a>
+        </div>
         <table class="table aiz-table">
             <tr>
                 <th>{{translate('Degree')}}</th>
+                <th>{{translate('Specialization')}}</th>
                 <th>{{translate('Institution')}}</th>
                 <th data-breakpoints="md">{{translate('Start')}}</th>
                 <th data-breakpoints="md">{{translate('End')}}</th>
@@ -24,6 +25,7 @@
             @foreach ($educations as $key => $education)
                 <tr>
                     <td>{{ $education->degree }}</td>
+                    <td>{{ $education->specialization }}</td>
                     <td>{{ $education->institution }}</td>
                     <td>{{ $education->start }}</td>
                     <td>{{ $education->end }}</td>

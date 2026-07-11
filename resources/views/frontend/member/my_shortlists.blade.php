@@ -12,14 +12,12 @@
                       <th>{{translate('Image')}}</th>
                       <th>{{translate('Name')}}</th>
                       <th data-breakpoints="lg">{{translate('Age')}}</th>
-                      @if(get_setting('member_spiritual_and_social_background_section') == 'on')
-                        <th data-breakpoints="lg">{{translate('Religion')}}</th>
-                      @endif
+                      <th data-breakpoints="lg">{{translate('Sect')}}</th>
                       @if(get_setting('member_present_address_section') == 'on')
-                        <th data-breakpoints="lg">{{translate('Location')}}</th>
+                        <th data-breakpoints="lg">{{translate('Current City-Current Country')}}</th>
                       @endif
-                      @if(get_setting('member_language_section') == 'on')
-                        <th data-breakpoints="lg">{{translate('Mother  Tongue')}}</th>
+                      @if(get_setting('member_career_section') == 'on')
+                        <th data-breakpoints="lg">{{translate('Profession')}}</th>
                       @endif
                       <th class="text-right" data-breakpoints="lg">{{translate('Options')}}</th>
                   </tr>
@@ -58,27 +56,23 @@
                             </a>
                           </td>
                           <td>{{ \Carbon\Carbon::parse($shortlist->user->member->birthday)->age }}</td>
-                          @if(get_setting('member_spiritual_and_social_background_section') == 'on')
                           <td>
-                            @if(!empty($shortlist->user->spiritual_backgrounds->religion_id))
-                                {{ $shortlist->user->spiritual_backgrounds->religion->name }}
+                            @if(!empty($shortlist->user->satsang_details->follower_of_sect_id))
+                                {{ $shortlist->user->satsang_details->followerOfSect->name }}
                             @endif
                           </td>
-                          @endif
                           @if(get_setting('member_present_address_section') == 'on')
                           <td>
                             @php
                                 $present_address = \App\Models\Address::where('type','present')->where('user_id', $shortlist->user_id)->first();
                             @endphp
-                            @if(!empty($present_address->country_id))
-                                {{ $present_address->country->name }}
-                            @endif
+                            {{ implode(' - ', array_filter([$present_address->city->name ?? null, $present_address->country->name ?? null])) }}
                           </td>
                           @endif
-                          @if(get_setting('member_language_section') == 'on')
+                          @if(get_setting('member_career_section') == 'on')
                           <td>
-                            @if($shortlist->user->member->mothere_tongue != null)
-                                {{ \App\Models\MemberLanguage::where('id',$shortlist->user->member->mothere_tongue)->first()->name }}
+                            @if($shortlist->user->career->count() > 0)
+                                {{ $shortlist->user->career->where('present', 1)->first()->designation ?? $shortlist->user->career->last()->designation }}
                             @endif
                           </td>
                           @endif

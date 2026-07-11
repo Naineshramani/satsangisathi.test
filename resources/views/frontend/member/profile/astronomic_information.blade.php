@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-astro">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Astronomic & Horoscope Information')}}</h5>
     </div>
@@ -57,7 +57,28 @@
             <div class="form-group row">
                 <div class="col-md-6">
                     <label for="sun_sign">{{translate('Sun Sign')}}</label>
-                    @php $user_sun_sign = !empty($member->astrologies->sun_sign) ? $member->astrologies->sun_sign : ""; @endphp
+                    @php
+                        $user_sun_sign = !empty($member->astrologies->sun_sign) ? $member->astrologies->sun_sign : "";
+                        if (empty($user_sun_sign) && !empty($member->member->birthday)) {
+                            $dob = \Carbon\Carbon::parse($member->member->birthday);
+                            $m   = (int)$dob->format('n');
+                            $d   = (int)$dob->format('j');
+                            $user_sun_sign = match(true) {
+                                ($m == 3 && $d >= 21) || ($m == 4 && $d <= 19) => 'aries',
+                                ($m == 4 && $d >= 20) || ($m == 5 && $d <= 20) => 'taurus',
+                                ($m == 5 && $d >= 21) || ($m == 6 && $d <= 20) => 'gemini',
+                                ($m == 6 && $d >= 21) || ($m == 7 && $d <= 22) => 'cancer',
+                                ($m == 7 && $d >= 23) || ($m == 8 && $d <= 22) => 'leo',
+                                ($m == 8 && $d >= 23) || ($m == 9 && $d <= 22) => 'virgo',
+                                ($m == 9 && $d >= 23) || ($m == 10 && $d <= 22) => 'libra',
+                                ($m == 10 && $d >= 23) || ($m == 11 && $d <= 21) => 'scorpio',
+                                ($m == 11 && $d >= 22) || ($m == 12 && $d <= 21) => 'sagittarius',
+                                ($m == 12 && $d >= 22) || ($m == 1 && $d <= 19) => 'capricorn',
+                                ($m == 1 && $d >= 20) || ($m == 2 && $d <= 18) => 'aquarius',
+                                default => 'pisces',
+                            };
+                        }
+                    @endphp
                     <select class="form-control aiz-selectpicker" name="sun_sign" data-live-search="true">
                         <option value="">{{translate('Select Sun Sign')}}</option>
                         <option value="aries" @if($user_sun_sign == 'aries') selected @endif>{{translate('Aries (Mar 21 – Apr 19)')}}</option>
@@ -78,7 +99,7 @@
                     @enderror
                 </div>
                 <div class="col-md-6">
-                    <label for="moon_sign">{{translate('Moon Sign')}}</label>
+                    <label for="moon_sign">{{translate('Moon Sign (Rashi)')}}</label>
                     @php $user_moon_sign = !empty($member->astrologies->moon_sign) ? $member->astrologies->moon_sign : ""; @endphp
                     <select class="form-control aiz-selectpicker" name="moon_sign" data-live-search="true">
                         <option value="">{{translate('Select Moon Sign')}}</option>
@@ -179,6 +200,19 @@
                     @enderror
                 </div>
             </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="horoscope_match_preference">{{translate('How important is Horoscope Matching to you?')}}</label>
+                    @php $user_hmp = $member->astrologies->horoscope_match_preference ?? ''; @endphp
+                    <select class="form-control aiz-selectpicker" name="horoscope_match_preference">
+                        <option value="">{{translate('Select One')}}</option>
+                        <option value="must_match" @if($user_hmp == 'must_match') selected @endif>{{translate('Must Match')}}</option>
+                        <option value="preferred_flexible" @if($user_hmp == 'preferred_flexible') selected @endif>{{translate('Preferred but Flexible')}}</option>
+                        <option value="doesnt_matter" @if($user_hmp == 'doesnt_matter') selected @endif>{{translate("Doesn't Matter")}}</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="text-right">
                 <button type="submit" class="btn btn-primary btn-sm">{{translate('Update')}}</button>
             </div>

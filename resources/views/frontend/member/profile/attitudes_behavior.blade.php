@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-attitudes">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Personal Attitude & Behavior')}}</h5>
     </div>

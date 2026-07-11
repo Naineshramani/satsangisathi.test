@@ -205,6 +205,11 @@
                                     </a>
                                 </li>
                                 @endcan
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{ route('degree-levels.index') }}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{ translate('Education Degrees') }}</span>
+                                    </a>
+                                </li>
                                 @can('show_annual_salary_ranges')
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('annual-salaries.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['annual-salaries.edit']) }}">

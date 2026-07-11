@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-residency">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Residency Information')}}</h5>
     </div>

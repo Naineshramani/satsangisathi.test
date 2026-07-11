@@ -12,6 +12,7 @@
                         <th>{{ translate('Image') }}</th>
                         <th>{{ translate('Name') }}</th>
                         <th>{{ translate('Age') }}</th>
+                        <th>{{ translate('Contact No') }}</th>
                         <th class="text-center">{{ translate('Action') }}</th>
                     </tr>
                 </thead>
@@ -41,10 +42,19 @@
                                             href="{{ route('member_profile', $interested_by->id) }}" @endif
                                         class="text-reset c-pointer">
                                         {{ $interested_by->first_name . ' ' . $interested_by->last_name }}
+                                    </a>
                                 </td>
-                                </a>
 
                                 <td>{{ \Carbon\Carbon::parse($interested_by->member->birthday)->age }}</td>
+                                <td>
+                                    @if ($interest->status == 1)
+                                        {{ $interested_by->phone ?? '' }}
+                                    @else
+                                        <span class="opacity-40" title="{{ translate('Visible once you accept this interest') }}">
+                                            <i class="las la-lock"></i> +xx xxx xxx xxx
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     @if ($interest->status != 1)
                                         <a href="javascript:void(0);" onclick="accept_interest({{ $interest->id }})"

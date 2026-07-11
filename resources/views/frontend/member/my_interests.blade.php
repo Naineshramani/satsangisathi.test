@@ -3,8 +3,6 @@
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0 h6">{{ translate('My Interests') }}</h5>
-            <a href="{{ route('interest_requests') }}"
-                class="mb-0 h6 btn btn-primary">{{ translate('Interest Requests') }}</a>
         </div>
         <div class="card-body">
             <table class="table aiz-table mb-0">
@@ -14,6 +12,7 @@
                         <th>{{ translate('Image') }}</th>
                         <th>{{ translate('Name') }}</th>
                         <th>{{ translate('Age') }}</th>
+                        <th>{{ translate('Contact No') }}</th>
                         <th class="text-center">{{ translate('Status') }}</th>
                         <th class="text-center">{{ translate('Action') }}</th>
 
@@ -50,6 +49,15 @@
                                 </a>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($interest->user->member->birthday)->age }}</td>
+                            <td>
+                                @if ($interest->status == 1)
+                                    {{ $interest->user->phone ?? '' }}
+                                @else
+                                    <span class="opacity-40" title="{{ translate('Visible once interest is accepted') }}">
+                                        <i class="las la-lock"></i> +xx xxx xxx xxx
+                                    </span>
+                                @endif
+                            </td>
                             <td class="text-center">
                                 @if ($interest->status == 1)
                                     <span class="badge badge-inline badge-success">{{ translate('Approved') }}</span>

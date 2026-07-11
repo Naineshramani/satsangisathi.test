@@ -252,6 +252,7 @@ Route::group(['middleware' => ['auth','activated']], function () {
 
     // member info edit
     Route::controller(MemberController::class)->group(function () {
+        Route::post('/members/contact_details_update', 'contact_details_update')->name('member.contact_details_update');
         Route::post('/members/introduction_update/{id}', 'introduction_update')->name('member.introduction.update');
         Route::post('/members/basic_info_update/{id}', 'basic_info_update')->name('member.basic_info_update');
         Route::post('/members/language_info_update/{id}', 'language_info_update')->name('member.language_info_update');

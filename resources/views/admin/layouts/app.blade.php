@@ -28,7 +28,7 @@
 
     <!-- aiz core css -->
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000,9999) }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css?v=1.6') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css?v=2.3') }}">
 
     <!-- Line Awesome CDN (after local CSS so CDN font-face wins) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/css/line-awesome.min.css">

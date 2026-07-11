@@ -10,7 +10,18 @@
         <div class="form-group row">
             <label class="col-md-3 col-form-label">{{translate('Degree')}}</label>
             <div class="col-md-9">
-                <input type="text" name="degree" class="form-control" placeholder="{{translate('Degree')}}" required>
+                <select name="degree" class="form-control aiz-selectpicker" data-live-search="true" required>
+                    <option value="">{{translate('Select Degree')}}</option>
+                    @foreach(\App\Models\DegreeLevel::orderBy('sort_order')->orderBy('name')->get() as $dl)
+                        <option value="{{ $dl->name }}">{{ $dl->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">{{translate('Specialization')}}</label>
+            <div class="col-md-9">
+                <input type="text" name="specialization" class="form-control" placeholder="{{ translate('e.g. Computer Science, Finance, Cardiology') }}">
             </div>
         </div>
         <div class="form-group row">

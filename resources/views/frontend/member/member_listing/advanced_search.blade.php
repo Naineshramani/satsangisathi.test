@@ -46,20 +46,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group mb-3">
-                                <label class="form-label" for="name">{{ translate('Religion') }}</label>
-                                @php $religions = \App\Models\Religion::all(); @endphp
-                                <select name="religion_id" id="religion_id" class="form-control aiz-selectpicker"  data-live-search="true" >
-                                    <option value="">{{translate('Choose One')}}</option>
-                                    @foreach ($religions as $religion)
-                                        <option value="{{ $religion->id }}" @if($religion->id == $religion_id) selected @endif> {{ $religion->name }} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    {{-- Religion fixed to Hindu --}}
+                    <input type="hidden" name="religion_id" id="religion_id" value="1">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
@@ -70,16 +58,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group mb-3">
-                                <label class="form-label" for="name">{{ translate('Sub Caste') }}</label>
-                                <select name="sub_caste_id" id="sub_caste_id" class="form-control aiz-selectpicker" data-live-search="true">
-                                    <option value="">{{translate('Select One')}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    <select name="sub_caste_id" id="sub_caste_id" class="d-none"></select>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
@@ -91,14 +70,6 @@
                                         <option value="{{$mother_tongue_select->id}}" @if($mother_tongue_select->id == $mother_tongue) selected @endif> {{ $mother_tongue_select->name }} </option>
                                     @endforeach
                                 </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                        <div class="form-grohp mb-3">
-                                <label class="form-label" for="name">{{ translate('Profession') }}</label>
-                                <input type="text" name="profession" value="{{ $profession }}" class="form-control" >
                             </div>
                         </div>
                     </div>
@@ -134,20 +105,6 @@
 
                                 </select>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label" for="name">{{ translate('Min Height') }}</label>
-                                <input type="number" name="min_height" value="{{ $min_height }}" class="form-control" min="0" step="0.01"  >
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label" for="name">{{ translate('Max Height') }}</label>
-                                <input type="number" name="max_height" value="{{ $max_height }}" class="form-control" min="0" step="0.01"   >
-                          </div>
                         </div>
                     </div>
                     <h6 class="separator text-left mb-3 fs-12 text-uppercase text-secondary">

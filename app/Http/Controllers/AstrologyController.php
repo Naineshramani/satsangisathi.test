@@ -115,8 +115,9 @@ class AstrologyController extends Controller
          $astrologies->moon_sign        = $request->moon_sign;
          $astrologies->nakshatra    = $request->nakshatra;
          $astrologies->gana    = $request->gana;
-         $astrologies->nadi    = $request->nadi;
-         $astrologies->manglik    = $request->manglik;
+         $astrologies->nadi                       = $request->nadi;
+         $astrologies->manglik                    = $request->manglik;
+         $astrologies->horoscope_match_preference = $request->horoscope_match_preference ?: null;
 
          if($astrologies->save()){
             if($astrologies->user->member->auto_horoscope_profile_match ==  1){

@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-hobbies">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Hobbies & Interest')}}</h5>
     </div>

@@ -57,7 +57,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            {{ $user->spiritual_backgrounds->religion->name ?? '' }}
+                                            {{ $user->satsang_details->followerOfSect->name ?? '' }}
                                             {{ !empty($user->spiritual_backgrounds->caste->name) ? ', ' . $user->spiritual_backgrounds->caste->name : '' }}
                                         </td>
                                         @if (!empty($present_address->country->name))
@@ -609,13 +609,6 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <th class="py-1 fw-600" style="width:55%">
-                                                                    {{ translate('Religion') }}</th>
-                                                                <td class="py-1">
-                                                                    {{ $user->spiritual_backgrounds->religion->name ?? '' }}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td class="py-1 fw-600" style="width:55%">
                                                                     {{ translate('First Language') }}
                                                                 </td>
@@ -631,6 +624,14 @@
                                                                 </td>
                                                                 <td class="py-1">
                                                                     {{ $user->member->annualSalaryRange != null ? single_price($user->member->annualSalaryRange->min_salary).' - '.single_price($user->member->annualSalaryRange->max_salary) : '' }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="py-1 fw-600" style="width:55%">
+                                                                    {{ translate('Disability') }}
+                                                                </td>
+                                                                <td class="py-1">
+                                                                    {{ $user->physical_attributes->disability ?? '' }}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -689,12 +690,136 @@
                                     </div>
                                 </div>
 
-
-                                @if (get_setting('member_present_address_section') == 'on')
-                                    <!-- Present Address -->
+                                <!-- Satsang Details -->
+                                @php
+                                    $satsang = $user->satsang_details;
+                                    $satsang_opt = function ($id) {
+                                        return $id ? optional(\App\Models\SatsangOption::find($id))->name : '';
+                                    };
+                                @endphp
+                                @if ($satsang)
                                     <div class="pb-4 accordion-item">
                                         <div class="accordion-head c-pointer d-flex align-items-center mb-4"
-                                            data-toggle="collapse" data-target="#present-address">
+                                            data-toggle="collapse" data-target="#satsang-details">
+                                            <span
+                                                class="size-50px border rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="las la-om fs-24 text-primary"></i>
+                                            </span>
+                                            <div class="ml-4">
+                                                <span
+                                                    class="fs-18 fw-600 d-block">{{ translate('Satsang Details') }}</span>
+                                            </div>
+                                        </div>
+                                        <div id="satsang-details" class="collapse accordion-body ml-3 ml-md-5 pl-25px">
+                                            <div class="border p-3">
+                                                <div class="row no-gutters">
+                                                    <div class="col-md-6">
+                                                        <table class="w-100">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Follower of (Sect)') }}</th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang_opt($satsang->follower_of_sect_id) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Name of the Mandal') }}</th>
+                                                                    <td class="py-1">{{ $satsang->name_of_mandal }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Nitya Pooja Daily') }}</th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang_opt($satsang->nitya_pooja_daily_id) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="py-1">{{ translate('Wear Kanthi') }}
+                                                                    </th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang_opt($satsang->wear_kanthi_id) }}
+                                                                    </td>
+                                                                </tr>
+                                                                @if ($user->member->gender == 1)
+                                                                    <tr>
+                                                                        <th class="py-1">
+                                                                            {{ translate('Wear Tilak Chandlo') }}</th>
+                                                                        <td class="py-1">
+                                                                            {{ $satsang_opt($satsang->wear_tilak_chandlo_id) }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-sm-6 border-sm-left ">
+                                                        <table class="w-100 ml-sm-4">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Eat Onion / Garlic') }}</th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang_opt($satsang->eat_onion_garlic_id) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Perform Aarti / Ghar Sabha') }}
+                                                                    </th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang_opt($satsang->perform_aarti_id) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Observes Sampradaya Fasts') }}
+                                                                    </th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang_opt($satsang->observe_fasts_id) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Temple Visit Frequency') }}</th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang_opt($satsang->temple_visit_frequency_id) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="py-1">
+                                                                        {{ translate('Volunteer Activities') }}</th>
+                                                                    <td class="py-1">
+                                                                        {{ $satsang->volunteer_activities }}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                @if ($satsang->define_yourself_satsangi)
+                                                    <div class="mt-3">
+                                                        <div class="fw-600 mb-1">
+                                                            {{ translate('Define Yourself as Satsangi') }}</div>
+                                                        <p class="mb-0">{{ $satsang->define_yourself_satsangi }}</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @php
+                                    $native_address = \App\Models\Address::where('user_id', $user->id)
+                                        ->where('type', 'native')
+                                        ->first();
+                                @endphp
+                                @if (get_setting('member_present_address_section') == 'on' || get_setting('member_permanent_address_section') == 'on' || $native_address)
+                                    <!-- Address Information -->
+                                    <div class="pb-4 accordion-item">
+                                        <div class="accordion-head c-pointer d-flex align-items-center mb-4"
+                                            data-toggle="collapse" data-target="#address-information">
                                             <span
                                                 class="size-50px border rounded-circle d-flex align-items-center justify-content-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -714,160 +839,76 @@
                                             </span>
                                             <div class="ml-4">
                                                 <span
-                                                    class="fs-18 fw-600 d-block">{{ translate('Present Address') }}</span>
+                                                    class="fs-18 fw-600 d-block">{{ translate('Address Information') }}</span>
                                             </div>
                                         </div>
-                                        <div id="present-address" class="collapse accordion-body ml-3 ml-md-5 pl-25px"
+                                        <div id="address-information" class="collapse accordion-body ml-3 ml-md-5 pl-25px"
                                            >
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="border p-3">
-                                                        <table class="w-100">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="py-1 fw-600">
-                                                                        <i class="las text-primary mr-2 la-flag"></i>
-                                                                        <span>{{ translate('Country') }}</span>
-                                                                    </td>
-                                                                    <td class="py-1">
-                                                                        {{ $present_address->country->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td class="py-1 fw-600">
-                                                                        <i class="las text-primary mr-2 la-map-marker"></i>
-                                                                        <span>{{ translate('State') }}</span>
-                                                                    </td>
-                                                                    <td class="py-1">
-                                                                        {{ $present_address->state->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td class="py-1 fw-600">
-                                                                        <i class="las text-primary mr-2 la-building"></i>
-                                                                        <span>{{ translate('City') }}</span>
-                                                                    </td>
-                                                                    <td class="py-1">
-                                                                        {{ $present_address->city->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td class="py-1 fw-600">
-                                                                        <i class="las text-primary mr-2 la-envelope"></i>
-                                                                        <span>{{ translate('Postal Code') }}</span>
-                                                                    </td>
-                                                                    <td class="py-1">
-                                                                        {{ $present_address->postal_code ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                            @if (get_setting('member_present_address_section') == 'on')
+                                                <span class="addr-section-header">{{ translate('Present Address') }}</span>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('Country') }}: </span>
+                                                        {{ $present_address->country->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('State') }}: </span>
+                                                        {{ $present_address->state->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('City') }}: </span>
+                                                        {{ $present_address->city->name ?? '' }}
                                                     </div>
                                                 </div>
-                                            </div>
+                                            @endif
+
+                                            @if (get_setting('member_permanent_address_section') == 'on')
+                                                @php
+                                                    $permanent_address = \App\Models\Address::where('user_id', $user->id)
+                                                        ->where('type', 'permanent')
+                                                        ->first();
+                                                @endphp
+                                                <span class="addr-section-header">{{ translate('Permanent Address') }}</span>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('Country') }}: </span>
+                                                        {{ $permanent_address->country->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('State') }}: </span>
+                                                        {{ $permanent_address->state->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('City') }}: </span>
+                                                        {{ $permanent_address->city->name ?? '' }}
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if ($native_address)
+                                                <span class="addr-section-header">{{ translate('Native Details') }}</span>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <span class="fw-600">{{ translate('Country') }}: </span>
+                                                        {{ $native_address->country->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="fw-600">{{ translate('State') }}: </span>
+                                                        {{ $native_address->state->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="fw-600">{{ translate('City') }}: </span>
+                                                        {{ $native_address->city->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <span class="fw-600">{{ translate('Village / Town / Area') }}: </span>
+                                                        {{ $native_address->native_village ?? '' }}
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif
-
-                                @php
-                                    $view_contact = \App\Models\ViewContact::where('user_id', $user->id)
-                                        ->where('viewed_by', Auth::user()->id)
-                                        ->first();
-                                @endphp
-                                <!-- Contact Details -->
-                                <div class="pb-4 accordion-item">
-                                    <div class="accordion-head c-pointer d-flex align-items-center mb-4"
-                                        data-toggle="collapse" data-target="#contact-details">
-                                        <span
-                                            class="size-50px border rounded-circle d-flex align-items-center justify-content-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="19.988" height="19.927"
-                                                viewBox="0 0 19.988 19.927" class="fill-primary-grad">
-                                                <g transform="translate(-1080 -807.536)">
-                                                    <path
-                                                        d="M19.41,13a3.147,3.147,0,0,1-.67-.12,9.86,9.86,0,0,1-1.31-.39,2,2,0,0,0-2.48,1l-.22.46a13.17,13.17,0,0,1-2.67-2,13.17,13.17,0,0,1-2-2.67l.46-.21a2,2,0,0,0,1-2.48,10.47,10.47,0,0,1-.39-1.32c-.05-.22-.09-.45-.12-.67a3,3,0,0,0-3-2.49H5a2.99,2.99,0,0,0-2.97,3.4A19.008,19.008,0,0,0,18.44,21.92a2.56,2.56,0,0,0,.39,0,2.993,2.993,0,0,0,3-3v-3A3,3,0,0,0,19.41,13Zm.49,6a1.005,1.005,0,0,1-1.15.99,17.16,17.16,0,0,1-9.87-4.84A17.16,17.16,0,0,1,4,5.25,1.005,1.005,0,0,1,5,4.1H8a1,1,0,0,1,1,.78,3.935,3.935,0,0,0,.15.82,11,11,0,0,0,.46,1.54l-1.4.66a1.042,1.042,0,0,0-.52,1.32,14.49,14.49,0,0,0,7,7,1.042,1.042,0,0,0,1.32-.52l.63-1.4a12.41,12.41,0,0,0,1.58.46c.26.06.54.11.81.15a1,1,0,0,1,.78,1ZM14,2h-.7a1,1,0,1,0,.17,2H14a6,6,0,0,1,6,6v.53a1,1,0,0,0,.91,1.08h.08a1,1,0,0,0,1-.91V10A8,8,0,0,0,14,2Zm2,8a1,1,0,0,0,2,0,4,4,0,0,0-4-4,1,1,0,0,0,0,2A2,2,0,0,1,16,10Z"
-                                                        transform="translate(1077.998 805.536)" class="fill-dark" />
-                                                    <path
-                                                        d="M19.41,13a3.147,3.147,0,0,1-.67-.12,9.86,9.86,0,0,1-1.31-.39,2,2,0,0,0-2.48,1l-.22.46a13.17,13.17,0,0,1-2.67-2,13.17,13.17,0,0,1-2-2.67l.46-.21a2,2,0,0,0,1-2.48,10.47,10.47,0,0,1-.39-1.32c-.05-.22-.09-.45-.12-.67a3,3,0,0,0-3-2.49H5a2.99,2.99,0,0,0-2.97,3.4A19.008,19.008,0,0,0,18.44,21.92a2.56,2.56,0,0,0,.39,0,2.993,2.993,0,0,0,3-3v-3A3,3,0,0,0,19.41,13Zm.49,6a1.005,1.005,0,0,1-1.15.99,17.16,17.16,0,0,1-9.87-4.84A17.16,17.16,0,0,1,4,5.25,1.005,1.005,0,0,1,5,4.1H8a1,1,0,0,1,1,.78,3.935,3.935,0,0,0,.15.82,11,11,0,0,0,.46,1.54l-1.4.66a1.042,1.042,0,0,0-.52,1.32,14.49,14.49,0,0,0,7,7,1.042,1.042,0,0,0,1.32-.52l.63-1.4a12.41,12.41,0,0,0,1.58.46c.26.06.54.11.81.15a1,1,0,0,1,.78,1Z"
-                                                        transform="translate(1077.998 805.536)"
-                                                        fill="url(#primary-gradient)" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <div class="ml-4">
-                                            <span class="fs-18 fw-600 d-block">{{ translate('Contact Details') }}</span>
-                                        </div>
-                                    </div>
-                                    <div id="contact-details" class="collapse accordion-body ml-3 ml-md-5 pl-25px"
-                                        >
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="border p-3">
-                                                    @if (Auth::user()->id != $user->id)
-                                                        @if ($user->phone != null)
-                                                            <div class="d-flex mb-3">
-                                                                <i class="las la-phone text-primary la-2x mr-3"></i>
-                                                                <div>
-                                                                    <div class="fs-15 fw-600 mb-1">
-                                                                        {{ translate('Contact Number') }}
-                                                                    </div>
-                                                                    @if (empty($view_contact))
-                                                                        <div class="fw-400">+xx xxx xxx xxx</div>
-                                                                    @else
-                                                                        <div class="fw-400">{{ $user->phone }}
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        @if ($user->email != null)
-                                                            <div class="d-flex">
-                                                                <i class="las la-envelope text-primary la-2x mr-3"></i>
-                                                                <div>
-                                                                    <div class="fs-15 fw-600 mb-1">
-                                                                        {{ translate('Email ID') }}</div>
-                                                                    @if (empty($view_contact))
-                                                                        <div class="fw-400">xxxxx@xxx.xx</div>
-                                                                    @else
-                                                                        <div class="fw-400">{{ $user->email }}
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        @endif
-
-                                                        @if (empty($view_contact))
-                                                            <a onclick="view_contact({{ $user->id }})"
-                                                                class="btn btn-block bg-primary text-white mt-2 view_contact">
-                                                                <i class="las la-phone"></i>
-                                                                {{ translate('View Contact Info') }}
-                                                            </a>
-                                                            <br>
-                                                        @endif
-                                                    @else
-                                                        <div class="d-flex mb-3">
-                                                            <i class="las la-phone text-primary la-2x mr-3"></i>
-                                                            <div>
-                                                                <div class="fs-15 fw-600 mb-1">
-                                                                    {{ translate('Contact Number') }}</div>
-                                                                <div class="fw-400">{{ $user->phone }}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-flex">
-                                                            <i class="las la-envelope text-primary la-2x mr-3"></i>
-                                                            <div>
-                                                                <div class="fs-15 fw-600 mb-1">
-                                                                    {{ translate('Email ID') }}
-                                                                </div>
-                                                                <div class="fw-400">{{ $user->email }}</div>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 @if (get_setting('member_education_section') == 'on')
                                     <!-- Education -->
@@ -901,6 +942,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <th>{{ translate('Degree') }}</th>
+                                                        <th>{{ translate('Specialization') }}</th>
                                                         <th>{{ translate('Institution') }}</th>
                                                         <th>{{ translate('Start') }}</th>
                                                         <th>{{ translate('End') }}</th>
@@ -910,6 +952,7 @@
                                                     @foreach ($educations as $key => $education)
                                                         <tr>
                                                             <td>{{ $education->degree }}</td>
+                                                            <td>{{ $education->specialization }}</td>
                                                             <td>{{ $education->institution }}</td>
                                                             <td>{{ $education->start }}</td>
                                                             <td>{{ $education->end }}</td>
@@ -951,22 +994,39 @@
                                             <table class="table table-borderless border table-responsive">
                                                 <tbody>
                                                     <tr>
-                                                        <th>{{ translate('designation') }}</th>
-                                                        <th>{{ translate('company') }}</th>
-                                                        <th>{{ translate('Start') }}</th>
-                                                        <th>{{ translate('End') }}</th>
-                                                        <th>{{ translate('Status') }}</th>
+                                                        <th>{{ translate('Type') }}</th>
+                                                        <th>{{ translate('Role / Nature') }}</th>
+                                                        <th>{{ translate('Company / Business') }}</th>
+                                                        <th>{{ translate('Currency') }}</th>
+                                                        <th>{{ translate('Monthly Income') }}</th>
+                                                        <th>{{ translate('Yearly Income') }}</th>
+                                                        <th>{{ translate('Is Current?') }}</th>
                                                     </tr>
                                                     @php $careers = \App\Models\Career::where('user_id', $user->id)->orderBy('present', 'desc')->get(); @endphp
                                                     @foreach ($careers as $key => $career)
+                                                        @php
+                                                            $typeLabel = match($career->employment_type ?? 'job') {
+                                                                'business'      => 'Business',
+                                                                'self_employed' => 'Self-Employed',
+                                                                'not_working'   => 'Not Working',
+                                                                default         => 'Job',
+                                                            };
+                                                            $roleDisplay = $career->employment_type === 'business'
+                                                                ? $career->nature_of_business
+                                                                : $career->designation;
+                                                        @endphp
                                                         <tr>
-                                                            <td>{{ $career->designation }}</td>
+                                                            <td><span class="badge badge-soft-primary">{{ $typeLabel }}</span></td>
+                                                            <td>{{ $roleDisplay }}</td>
                                                             <td>{{ $career->company }}</td>
+                                                            <td>{{ $career->currency ?? 'INR' }}</td>
                                                             <td>{{ $career->start }}</td>
                                                             <td>{{ $career->end }}</td>
                                                             <td>
                                                                 @if ($career->present == 1)
-                                                                    <span class="badge badge-inline badge-success">{{ translate('Running') }}</span>
+                                                                    <span class="badge badge-inline badge-success">{{ translate('Yes') }}</span>
+                                                                @else
+                                                                    <span class="badge badge-inline badge-danger">{{ translate('No') }}</span>
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -1469,65 +1529,17 @@
                                             >
                                             <div class="border p-3">
                                                 <div class="row no-gutters">
-                                                    <div class="col-md-6">
-                                                        <table class="w-100">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('Religion') }}
-                                                                    </th>
-                                                                    <td class="py-1">
-                                                                        {{ $user->spiritual_backgrounds->religion->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('Sub Caste') }}
-                                                                    </th>
-                                                                    <td class="py-1">
-                                                                        {{ $user->spiritual_backgrounds->sub_caste->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="py-1">
-                                                                        {{ translate('Personal Value') }}</th>
-                                                                    <td class="py-1">
-                                                                        {{ $user->spiritual_backgrounds->personal_value ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="py-1">
-                                                                        {{ translate('Community Value') }}</th>
-                                                                    <td class="py-1">
-                                                                        {{ $user->spiritual_backgrounds->community_value ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('Caste') }}: </span>
+                                                        {{ $user->spiritual_backgrounds->caste->name ?? '' }}
                                                     </div>
-                                                    <div class="col-sm-6 border-sm-left ">
-                                                        <table class="w-100 ml-sm-4">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('Caste') }}</th>
-                                                                    <td class="py-1">
-                                                                        {{ $user->spiritual_backgrounds->caste->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('Ethnicity') }}
-                                                                    </th>
-                                                                    <td class="py-1">
-                                                                        {{ $user->spiritual_backgrounds->ethnicity ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="py-1">
-                                                                        {{ translate('Family Value') }}</th>
-                                                                    <td class="py-1">
-                                                                        {{ $user->spiritual_backgrounds->family_value->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('Family Value') }}: </span>
+                                                        {{ $user->spiritual_backgrounds->family_value->name ?? '' }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <span class="fw-600">{{ translate('Family Status') }}: </span>
+                                                        {{ $user->spiritual_backgrounds->family_status->name ?? '' }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -1686,87 +1698,6 @@
                                     </div>
                                 @endif
 
-                                <!-- Permanent Address -->
-                                @if (get_setting('member_permanent_address_section') == 'on')
-                                    <div class="pb-4 accordion-item">
-                                        <div class="accordion-head c-pointer d-flex align-items-center mb-4"
-                                            data-toggle="collapse" data-target="#permanent-address">
-                                            <span
-                                                class="size-50px border rounded-circle d-flex align-items-center justify-content-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24.659"
-                                                    height="19.623" viewBox="0 0 24.659 19.623"
-                                                    class="fill-primary-grad">
-                                                    <g transform="translate(-1078.67 -2909.649)">
-                                                        <path
-                                                            d="M111.028,264.3v7.342a.992.992,0,0,1-.979.979h-5.873V266.75h-3.915v5.873H94.387a.992.992,0,0,1-.979-.979V264.3a.209.209,0,0,1,.008-.046.209.209,0,0,0,.008-.046l8.795-7.25,8.795,7.25A.213.213,0,0,1,111.028,264.3Zm3.411-1.055-.948,1.132a.52.52,0,0,1-.321.168h-.046a.47.47,0,0,1-.321-.107l-10.584-8.825-10.584,8.825a.569.569,0,0,1-.367.107.52.52,0,0,1-.321-.168L90,263.248a.5.5,0,0,1-.107-.359.444.444,0,0,1,.168-.329l11-9.162a1.9,1.9,0,0,1,2.325,0l3.732,3.12v-2.983a.471.471,0,0,1,.489-.489h2.937a.471.471,0,0,1,.489.489v6.24l3.35,2.784a.444.444,0,0,1,.168.329A.5.5,0,0,1,114.439,263.248Z"
-                                                            transform="translate(988.781 2656.649)"
-                                                            fill="url(#primary-gradient)" />
-                                                        <path
-                                                            d="M114.439,263.248l-.948,1.132a.52.52,0,0,1-.321.168h-.046a.47.47,0,0,1-.321-.107l-10.584-8.825-10.584,8.825a.569.569,0,0,1-.367.107.52.52,0,0,1-.321-.168L90,263.248a.5.5,0,0,1-.107-.359.444.444,0,0,1,.168-.329l11-9.162a1.9,1.9,0,0,1,2.325,0l3.732,3.12v-2.983a.471.471,0,0,1,.489-.489h2.937a.471.471,0,0,1,.489.489v6.24l3.35,2.784a.444.444,0,0,1,.168.329A.5.5,0,0,1,114.439,263.248Z"
-                                                            transform="translate(988.781 2656.649)" class="fill-dark" />
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                            <div class="ml-4">
-                                                <span
-                                                    class="fs-18 fw-600 d-block">{{ translate('Permanent Address') }}</span>
-                                            </div>
-                                        </div>
-                                        <div id="permanent-address" class="collapse accordion-body ml-3 ml-md-5 pl-25px"
-                                           >
-
-                                            @php
-                                                $permanent_address = \App\Models\Address::where('user_id', $user->id)
-                                                    ->where('type', 'permanent')
-                                                    ->first();
-                                            @endphp
-                                            <div class="border p-3">
-                                                <div class="row no-gutters">
-                                                    <div class="col-md-6">
-                                                        <table class="w-100">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('City') }}</th>
-                                                                    <td class="py-1">
-                                                                        {{ $permanent_address->city->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('Country') }}
-                                                                    </th>
-                                                                    <td class="py-1">
-                                                                        {{ $permanent_address->country->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="col-sm-6 border-sm-left ">
-                                                        <table class="w-100 ml-sm-4">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('State') }}</th>
-                                                                    <td class="py-1">
-                                                                        {{ $permanent_address->state->name ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('Postal Code') }}
-                                                                    </th>
-                                                                    <td class="py-1">
-                                                                        {{ $permanent_address->postal_code ?? '' }}
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-
                                 <!-- Family Information -->
                                 @if (get_setting('member_family_information_section') == 'on')
                                     <div class="pb-4 accordion-item">
@@ -1844,11 +1775,6 @@
                                                                     <th class="py-1">{{ translate('About Siblings') }}</th>
                                                                     <td width="70%"><p>{{ $user->families->about_siblings ?? translate('N/A') }}</p></td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <th class="py-1">{{ translate('About Relatives') }}</th>
-                                                                    <td width="70%"><p>{{ $user->families->about_relatives ?? translate('N/A') }}</p></td>
-                                                                </tr>
-                                                                
                                                             </tbody>
                                                         </table>
                                                     </div>

@@ -392,6 +392,31 @@ class MemberController extends Controller
         return view('admin.members.edit_profile_attributes.introduction', compact('member'));
     }
 
+    public function contact_details_update(Request $request)
+    {
+        $request->validate([
+            'father_mobile'   => ['nullable', 'string', 'max:20'],
+            'mother_mobile'   => ['nullable', 'string', 'max:20'],
+            'primary_contact' => ['required', 'in:candidate,father,mother'],
+        ]);
+
+        $user = Auth::user();
+
+        $father_cc = preg_replace('/\D/', '', $request->father_country_code ?? '');
+        $father_num = preg_replace('/\D/', '', $request->father_mobile ?? '');
+        $user->father_mobile = ($father_cc && $father_num) ? '+' . $father_cc . $father_num : ($father_num ?: null);
+
+        $mother_cc = preg_replace('/\D/', '', $request->mother_country_code ?? '');
+        $mother_num = preg_replace('/\D/', '', $request->mother_mobile ?? '');
+        $user->mother_mobile = ($mother_cc && $mother_num) ? '+' . $mother_cc . $mother_num : ($mother_num ?: null);
+
+        $user->primary_contact = $request->primary_contact;
+        $user->save();
+
+        flash(translate('Contact details updated successfully'))->success();
+        return back();
+    }
+
     public function introduction_update(Request $request, $id)
     {
         $member = Member::findOrFail($id);
@@ -414,7 +439,7 @@ class MemberController extends Controller
             'on_behalf'     => ['nullable'],
             'marital_status' => ['required'],
             'annual_salary_range' => ['nullable'],
-            'height'        => ['nullable', 'numeric'],
+            'height'        => ['nullable', 'string', 'max:10'],
             'weight'        => ['nullable', 'numeric'],
             'disability'    => ['nullable', 'max:255'],
         ];
@@ -460,6 +485,7 @@ class MemberController extends Controller
         $member->birthday           = date('Y-m-d', strtotime($request->date_of_birth));
         $member->marital_status_id  = $request->marital_status;
         $member->children           = $request->children;
+        $member->children_details   = ($request->children > 0) ? $request->children_details : null;
         if ($request->annual_salary_range) {
             $member->annual_salary_range_id = $request->annual_salary_range;
         }
@@ -837,6 +863,8 @@ class MemberController extends Controller
         $data['satsang_sects']             = SatsangOption::category('sect')->get();
         $data['satsang_nitya_pooja']       = SatsangOption::category('nitya_pooja')->get();
         $data['satsang_kanthi_tilak']      = SatsangOption::category('kanthi_tilak')->get();
+        $data['satsang_kanthi']            = SatsangOption::category('kanthi')->get();
+        $data['satsang_tilak_chandlo']     = SatsangOption::category('tilak_chandlo')->get();
         $data['satsang_onion_garlic']      = SatsangOption::category('onion_garlic')->get();
         $data['satsang_aarti']             = SatsangOption::category('aarti')->get();
         $data['satsang_fasts']             = SatsangOption::category('fasts')->get();

@@ -11,12 +11,27 @@ class CareerController extends Controller
 {
     public function __construct()
     {
-        $this->rules = [
-            'designation'  => [ 'required','max:255'],
-            'company'      => [ 'required','max:255'],
-            'career_start' => [ 'nullable','numeric'],
-            'career_end'   => [ 'nullable','numeric'],
+        $this->baseRules = [
+            'employment_type' => ['required', 'in:job,business,self_employed,not_working'],
+            'career_start'    => ['nullable', 'numeric'],
+            'career_end'      => ['nullable', 'numeric'],
         ];
+    }
+
+    protected function getRules(string $type): array
+    {
+        $rules = $this->baseRules;
+        if ($type === 'job') {
+            $rules['designation'] = ['required', 'max:255'];
+            $rules['company']     = ['required', 'max:255'];
+        } elseif ($type === 'business') {
+            $rules['nature_of_business'] = ['required', 'max:255'];
+            $rules['company']            = ['required', 'max:255'];
+        } elseif ($type === 'self_employed') {
+            $rules['designation'] = ['required', 'max:255'];
+        }
+        // not_working: no additional fields required
+        return $rules;
     }
 
     public function index(){}
@@ -29,30 +44,30 @@ class CareerController extends Controller
 
     public function store(Request $request)
     {
-        $rules = $this->rules;
-        $validator = Validator::make($request->all(), $rules);
+        $type      = $request->employment_type ?? 'job';
+        $validator = Validator::make($request->all(), $this->getRules($type));
 
         if ($validator->fails()) {
             flash(translate('Something went wrong'))->error();
             return Redirect::back();
         }
 
-        $career              = new Career;
-        $career->user_id     = $request->user_id;
-        $career->designation = $request->designation;
-        $career->company     = $request->company;
-        $career->currency    = $request->currency ?? 'INR';
-        $career->start       = $request->career_start;
-        $career->end         = $request->career_end;
+        $career                    = new Career;
+        $career->user_id           = $request->user_id;
+        $career->employment_type   = $type;
+        $career->designation       = $request->designation ?: null;
+        $career->nature_of_business = $request->nature_of_business ?: null;
+        $career->company           = $request->company ?: null;
+        $career->currency          = $request->currency ?? 'INR';
+        $career->start             = $request->career_start;
+        $career->end               = $request->career_end;
 
-        if($career->save()){
+        if ($career->save()) {
             flash(translate('Career Info has been added successfully'))->success();
             return back();
         }
-        else {
-            flash(translate('Sorry! Something went wrong.'))->error();
-            return back();
-        }
+        flash(translate('Sorry! Something went wrong.'))->error();
+        return back();
     }
 
     public function show($id){}
@@ -65,29 +80,29 @@ class CareerController extends Controller
 
     public function update(Request $request, $id)
     {
-        $rules = $this->rules;
-        $validator = Validator::make($request->all(), $rules);
+        $type      = $request->employment_type ?? 'job';
+        $validator = Validator::make($request->all(), $this->getRules($type));
 
         if ($validator->fails()) {
             flash(translate('Something went wrong'))->error();
             return Redirect::back();
         }
 
-        $career              = Career::findOrFail($id);
-        $career->designation = $request->designation;
-        $career->company     = $request->company;
-        $career->currency    = $request->currency ?? 'INR';
-        $career->start       = $request->career_start;
-        $career->end         = $request->career_end;
+        $career                     = Career::findOrFail($id);
+        $career->employment_type    = $type;
+        $career->designation        = $request->designation ?: null;
+        $career->nature_of_business = $request->nature_of_business ?: null;
+        $career->company            = $request->company ?: null;
+        $career->currency           = $request->currency ?? 'INR';
+        $career->start              = $request->career_start;
+        $career->end                = $request->career_end;
 
-        if($career->save()){
+        if ($career->save()) {
             flash(translate('Career Info has been updated successfully'))->success();
             return back();
         }
-        else {
-            flash(translate('Sorry! Something went wrong.'))->error();
-            return back();
-        }
+        flash(translate('Sorry! Something went wrong.'))->error();
+        return back();
     }
 
     public function update_career_present_status(Request $request)
@@ -104,14 +119,11 @@ class CareerController extends Controller
 
     public function destroy($id)
     {
-        if(Career::destroy($id))
-        {
+        if (Career::destroy($id)) {
             flash(translate('Career info has been deleted successfully'))->success();
             return back();
         }
-        else {
-            flash(translate('Sorry! Something went wrong.'))->error();
-            return back();
-        }
+        flash(translate('Sorry! Something went wrong.'))->error();
+        return back();
     }
 }

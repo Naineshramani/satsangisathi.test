@@ -542,9 +542,9 @@
             $step = 1;
             @endphp
             @foreach ($how_it_works_steps_titles as $key => $how_it_works_steps_title)
-            <div class="col-lg">
-                <div class="border p-3 mb-3">
-                    <div class=" row align-items-center">
+            <div class="col-lg d-flex">
+                <div class="border p-3 mb-3 w-100 d-flex flex-column justify-content-between">
+                    <div class="row align-items-center flex-grow-1">
                         <div class="col-7">
                             <div class="text-primary fw-600 h1">{{ $step++ }}</div>
                             <div class="text-secondary fs-20 mb-2 fw-600">{{ $how_it_works_steps_title }}
@@ -744,14 +744,14 @@
                             @if (Auth::check())
                             <a href="{{ route('package_payment_methods', encrypt($package->id)) }}"
                                 type="submit"
-                                class="btn btn-primary round-btn">{{ translate('Purchase This Package') }}</a>
+                                class="btn btn-primary round-btn">{{ translate('Activate') }}</a>
                             @else
                             <button type="submit" onclick="loginModal()"
-                                class="btn btn-primary round-btn">{{ translate('Purchase This Package') }}</button>
+                                class="btn btn-primary round-btn">{{ translate('Activate') }}</button>
                             @endif
                             @else
                             <a href="javascript:void(0);"
-                                class="btn btn-light round-btn"><del>{{ translate('Purchase This Package') }}</del></a>
+                                class="btn btn-light round-btn"><del>{{ translate('Activate') }}</del></a>
                             @endif
                         </div>
                     </div>

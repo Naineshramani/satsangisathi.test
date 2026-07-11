@@ -1,4 +1,4 @@
-<div class="@if(get_setting('header_stikcy') == 'on') position-fixed @else position-absolute @endif w-100 top-0 z-1020">
+<div class="position-fixed w-100 top-0 z-1020" id="site-header">
     <header class="aiz-header shadow-md bg-white border-gray-300">
         <div class="aiz-navbar position-relative">
             <div class="container">
@@ -16,31 +16,31 @@
                     </div>
                     <ul class="mb-0 pl-0 ml-lg-auto d-lg-flex align-items-stretch justify-content-center justify-content-lg-start mobile-hor-swipe">
                         <li class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['home'],'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center bg-white py-1"
+                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center py-1"
                                 href="{{ route('home') }}">
                                 <span class="text-primary-grad mb-n1">{{ translate('Home') }}</span>
                             </a>
                         </li>
                         <li class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['member.listing'],'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center bg-white py-1"
+                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center py-1"
                                 href="{{ route('member.listing') }}">
                                 <span class="text-primary-grad mb-n1">{{ translate('Active Members') }}</span>
                             </a>
                         </li>
                         <li class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['packages'],'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center bg-white py-1"
+                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center py-1"
                                 href="{{ route('packages') }}">
                                 <span class="text-primary-grad mb-n1">{{ translate('Premium Plans') }}</span>
                             </a>
                         </li>
                         <li class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['happy_stories'],'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center bg-white py-1"
+                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center py-1"
                                 href="{{ route('happy_stories') }}">
                                 <span class="text-primary-grad mb-n1">{{ translate('Happy Stories') }}</span>
                             </a>
                         </li>
                         <li class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['contact_us'],'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center bg-white py-1"
+                            <a class="nav-link text-uppercase fw-700 fs-14 d-flex align-items-center py-1"
                                 href="{{ route('contact_us') }}">
                                 <span class="text-primary-grad mb-n1">{{ translate('Contact Us') }}</span>
                             </a>
@@ -178,52 +178,40 @@
                             <a href="{{ $hdrVerified ? route('my_interests.index') : 'javascript:void(0)' }}"
                                 class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['my_interests.index','express-interest.index'],'text-primary-grad opacity-100') : 'opacity-40' }}"
                                 @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
-                                @if(!$hdrVerified)<i class="las la-lock mr-1"></i>@endif
-                                <span>{{ translate('My Interest') }}</span>
+                                <span>{{ translate('Interest Sent') }}</span>
+                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{{ $hdrVerified ? route('interest_requests') : 'javascript:void(0)' }}"
+                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['interest_requests'],'text-primary-grad opacity-100') : 'opacity-40' }}"
+                                @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
+                                <span>{{ translate('Interest Received') }}</span>
+                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                         <li class="list-inline-item">
                             <a href="{{ $hdrVerified ? route('my_shortlists') : 'javascript:void(0)' }}"
                                 class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['my_shortlists'],'text-primary-grad opacity-100') : 'opacity-40' }}"
                                 @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
-                                @if(!$hdrVerified)<i class="las la-lock mr-1"></i>@endif
                                 <span>{{ translate('Shortlist') }}</span>
+                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                         <li class="list-inline-item">
                             <a href="{{ $hdrVerified ? route('all.messages') : 'javascript:void(0)' }}"
                                 class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['all.messages'],'text-primary-grad opacity-100') : 'opacity-40' }}"
                                 @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
-                                @if(!$hdrVerified)<i class="las la-lock mr-1"></i>@endif
                                 <span>{{ translate('Messaging') }}</span>
+                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
-                        @if(Auth::user()->member->auto_profile_match == 1)
-                            <li class="list-inline-item">
-                                <a href="{{ $hdrVerified ? route('my_matched_profiles') : 'javascript:void(0)' }}"
-                                    class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['my_matched_profiles'],'text-primary-grad opacity-100') : 'opacity-40' }}"
-                                    @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
-                                    @if(!$hdrVerified)<i class="las la-lock mr-1"></i>@endif
-                                    <span>{{ translate('Matched Profile') }}</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if(Auth::user()->member->auto_horoscope_profile_match == 1)
-                            <li class="list-inline-item">
-                                <a href="{{ $hdrVerified ? route('horoscope_matched_profiles') : 'javascript:void(0)' }}"
-                                    class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['horoscope_matched_profiles'],'text-primary-grad opacity-100') : 'opacity-40' }}"
-                                    @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
-                                    @if(!$hdrVerified)<i class="las la-lock mr-1"></i>@endif
-                                    <span>{{ translate('Horoscope Matched Profile') }}</span>
-                                </a>
-                            </li>
-                        @endif
                         <li class="list-inline-item">
                             <a href="{{ $hdrVerified ? route('profile-viewers.index') : 'javascript:void(0)' }}"
                                 class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['profile-viewers.index'],'text-primary-grad opacity-100') : 'opacity-40' }}"
                                 @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
-                                @if(!$hdrVerified)<i class="las la-lock mr-1"></i>@endif
                                 <span>{{ translate('Profile Viewers') }}</span>
+                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                     </ul>

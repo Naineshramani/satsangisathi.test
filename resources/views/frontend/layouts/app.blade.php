@@ -61,7 +61,7 @@ $lang = \App\Models\Language::where('code', $locale)->first();
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css?v=2') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000,9999) }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css?v=1.6') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css?v=3.0') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/css/line-awesome.min.css">
 
     @if (\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
@@ -363,10 +363,11 @@ $lang = \App\Models\Language::where('code', $locale)->first();
 
 <body class="text-left @yield('body_class')">
 
-    <div
-        class="aiz-main-wrapper d-flex flex-column position-relative @if (Route::currentRouteName() != 'home') pt-6 pt-lg-8 @endif bg-white">
+    <div class="aiz-main-wrapper d-flex flex-column position-relative bg-white">
 
         @include('frontend.inc.header')
+        {{-- Spacer pushes content below the fixed header; height set by JS --}}
+        <div id="header-spacer"></div>
 
         @yield('content')
 
@@ -581,6 +582,18 @@ $lang = \App\Models\Language::where('code', $locale)->first();
                 }
             }
             window.addEventListener('scroll', onScroll, { passive: true });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var header = document.getElementById('site-header');
+            var spacer = document.getElementById('header-spacer');
+            function setSpacerHeight() {
+                if (header && spacer) spacer.style.height = header.offsetHeight + 'px';
+            }
+            setSpacerHeight();
+            window.addEventListener('resize', setSpacerHeight);
         })();
     </script>
 

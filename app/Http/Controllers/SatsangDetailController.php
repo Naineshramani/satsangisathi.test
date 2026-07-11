@@ -19,7 +19,9 @@ class SatsangDetailController extends Controller
         $detail->follower_of_sect_id       = $request->follower_of_sect_id ?: null;
         $detail->name_of_mandal            = $request->name_of_mandal;
         $detail->nitya_pooja_daily_id      = $request->nitya_pooja_daily_id ?: null;
-        $detail->wear_kanthi_tilak_id      = $request->wear_kanthi_tilak_id ?: null;
+        $detail->wear_kanthi_tilak_id      = null;
+        $detail->wear_kanthi_id            = $request->wear_kanthi_id ?: null;
+        $detail->wear_tilak_chandlo_id     = $request->wear_tilak_chandlo_id ?: null;
         $detail->eat_onion_garlic_id       = $request->eat_onion_garlic_id ?: null;
         $detail->perform_aarti_id          = $request->perform_aarti_id ?: null;
         $detail->observe_fasts_id          = $request->observe_fasts_id ?: null;

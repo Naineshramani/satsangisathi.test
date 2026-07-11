@@ -15,20 +15,39 @@
 }
 
 
-/* Transparent top navbar on homepage only — sub-nav row stays white */
-body.home-page .aiz-header {
+/* Fixed header — spacer div (height set by JS) pushes content below it */
+body { margin-top: 0 !important; padding-top: 0 !important; }
+.aiz-main-wrapper { padding-top: 0 !important; margin-top: 0 !important; }
+#header-spacer { flex-shrink: 0; }
+
+/* Transparent header over hero */
+.aiz-header {
     background: transparent !important;
     box-shadow: none !important;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
-body.home-page .aiz-header.nav-scrolled {
-    background: #fff !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
-}
-/* Keep the sub-nav (Dashboard / My Profile / tabs) always on a white strip */
-body.home-page .aiz-header .border-top {
+/* Sub-nav (Dashboard / My Profile / tabs) always white */
+.aiz-header .border-top {
     background: #fff !important;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+/* Active nav item — underline instead of gold block background */
+.aiz-navbar ul > li.bg-primary-grad {
+    background: transparent !important;
+    border-bottom: 3px solid var(--primary);
+}
+
+/* Minimal logo padding */
+.aiz-navbar .logo a {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+/* Logo background matches transparent navbar — blends white out of PNG */
+.aiz-navbar .logo,
+.aiz-navbar .logo a {
+    background: transparent !important;
+}
+.aiz-navbar .logo img {
+    mix-blend-mode: multiply;
 }
 
 /* Nav auth buttons (Log In / Registration) hover pop effect */
@@ -60,4 +79,99 @@ body.home-page .aiz-header .border-top {
 .aiz-upload-tile.is-dragging {
     border-color: #e9a820 !important;
     background: #fffbf2 !important;
+}
+
+/* Profile card headers — gold gradient background matching Update button */
+.card > .card-header,
+.card .card-header {
+    background: linear-gradient(225deg, var(--primary, #E8A800) 0%, var(--hov-primary, #C68A00) 100%) !important;
+    border-bottom: none !important;
+}
+.card > .card-header h5,
+.card > .card-header h6,
+.card > .card-header .h6,
+.card .card-header h5,
+.card .card-header h6,
+.card .card-header .h6 {
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    font-family: inherit !important;
+    letter-spacing: 0.01em !important;
+    text-transform: none !important;
+    margin: 0 !important;
+}
+
+/* Checkbox — filled gold box + white unicode tick when checked */
+.aiz-checkbox > input:checked ~ .aiz-square-check {
+    background-color: var(--primary, #E8A800) !important;
+    border-color: var(--primary, #E8A800) !important;
+}
+.aiz-checkbox > input:checked ~ .aiz-square-check::after {
+    content: '\2713' !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    line-height: 14px !important;
+    text-align: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    transform: none !important;
+}
+
+/* Radio button — gold fill when selected */
+.aiz-checkbox > input[type="radio"]:checked ~ .aiz-rounded-check {
+    background-color: var(--primary, #E8A800) !important;
+    border-color: var(--primary, #E8A800) !important;
+}
+.aiz-checkbox > input[type="radio"]:checked ~ .aiz-rounded-check::after {
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: #fff !important;
+}
+
+/* Section sub-headers inside cards — solid gold (used by address sub-sections via card-section-header) */
+.card-section-header {
+    display: block;
+    background: linear-gradient(225deg, var(--primary, #E8A800) 0%, var(--hov-primary, #C68A00) 100%);
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+}
+
+/* Add New button — cream background, gold text, matching Public Profile style */
+.btn-add-new {
+    background: #FFF8E7 !important;
+    color: var(--primary, #E8A800) !important;
+    font-weight: 700 !important;
+    border: 1.5px solid var(--primary, #E8A800) !important;
+    border-radius: 6px !important;
+}
+.btn-add-new:hover {
+    background: var(--primary, #E8A800) !important;
+    color: #fff !important;
+}
+
+/* Address section sub-headers — cream background, gold text (matches Public Profile style) */
+.addr-section-header {
+    display: block;
+    background: #FFF8E7;
+    color: var(--primary, #E8A800) !important;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.01em;
 }

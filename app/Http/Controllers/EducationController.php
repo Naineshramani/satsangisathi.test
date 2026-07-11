@@ -39,10 +39,11 @@ class EducationController extends Controller
 
         $education              = new Education;
         $education->user_id     = $request->user_id;
-        $education->degree      = $request->degree;
-        $education->institution = $request->institution;
-        $education->start       = $request->education_start;
-        $education->end         = $request->education_end;
+        $education->degree          = $request->degree;
+        $education->specialization  = $request->specialization ?: null;
+        $education->institution     = $request->institution;
+        $education->start           = $request->education_start;
+        $education->end             = $request->education_end;
 
         if($education->save()){
             flash(translate('Education Info has been added successfully'))->success();
@@ -74,10 +75,11 @@ class EducationController extends Controller
         }
 
         $education              = Education::findOrFail($id);
-        $education->degree      = $request->degree;
-        $education->institution = $request->institution;
-        $education->start       = $request->education_start;
-        $education->end         = $request->education_end;
+        $education->degree          = $request->degree;
+        $education->specialization  = $request->specialization ?: null;
+        $education->institution     = $request->institution;
+        $education->start           = $request->education_start;
+        $education->end             = $request->education_end;
 
         if($education->save()){
             flash(translate('Education Info has been updated successfully'))->success();

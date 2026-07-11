@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-basic-info">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Basic Information')}}</h5>
     </div>
@@ -16,14 +16,14 @@
             <div class="form-group row">
                 <div class="col-md-6">
                     <label>{{translate('First Name')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center" style="color:#888;">
-                        <i class="las la-lock mr-2"></i> {{ $member->first_name }}
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                        <span>{{ $member->first_name }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label>{{translate('Last Name')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center" style="color:#888;">
-                        <i class="las la-lock mr-2"></i> {{ $member->last_name }}
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                        <span>{{ $member->last_name }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
             </div>
@@ -31,16 +31,14 @@
             <div class="form-group row">
                 <div class="col-md-4">
                     <label>{{translate('Gender')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center" style="color:#888;">
-                        <i class="las la-lock mr-2"></i>
-                        {{ $member->member->gender == 1 ? translate('Male') : translate('Female') }}
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                        <span>{{ $member->member->gender == 1 ? translate('Male') : translate('Female') }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label>{{translate('Date Of Birth')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center" style="color:#888;">
-                        <i class="las la-lock mr-2"></i>
-                        {{ !empty($member->member->birthday) ? date('d M Y', strtotime($member->member->birthday)) : '—' }}
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                        <span>{{ !empty($member->member->birthday) ? date('d M Y', strtotime($member->member->birthday)) : '—' }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -77,31 +75,52 @@
                 </div>
                 <div class="col-md-6" id="children_field" @if(!$showChildren) style="display:none;" @endif>
                     <label>{{translate('Number Of Children')}}</label>
-                    <input type="text" name="children" value="{{ $member->member->children }}" class="form-control" placeholder="{{translate('Number Of Children')}}">
+                    <input type="number" name="children" id="children_input" value="{{ $member->member->children }}" class="form-control" placeholder="{{translate('Number Of Children')}}" min="0">
+                </div>
+            </div>
+            @php $childrenCount = intval($member->member->children ?? 0); @endphp
+            <div class="form-group row mt-3" id="children_details_field" @if(!$showChildren || $childrenCount <= 0) style="display:none;" @endif>
+                <div class="col-md-12">
+                    <label>{{translate('Details About Children')}}</label>
+                    <textarea name="children_details" class="form-control" rows="3" placeholder="{{translate('e.g. age, gender, living with you, etc.')}}">{{ $member->member->children_details }}</textarea>
                 </div>
             </div>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     var maritalSelect = document.getElementById('marital_status_select');
                     var childrenField = document.getElementById('children_field');
+                    var childrenInput = document.getElementById('children_input');
+                    var childrenDetailsField = document.getElementById('children_details_field');
+
+                    function toggleChildrenDetails() {
+                        var count = parseInt(childrenInput.value) || 0;
+                        childrenDetailsField.style.display = (count > 0) ? '' : 'none';
+                        if (count <= 0) childrenDetailsField.querySelector('textarea').value = '';
+                    }
+
                     function toggleChildren() {
                         var val = maritalSelect.value;
                         if (val == '2' || val == '3') {
                             childrenField.style.display = '';
                         } else {
                             childrenField.style.display = 'none';
-                            childrenField.querySelector('input').value = '';
+                            childrenDetailsField.style.display = 'none';
+                            childrenInput.value = '';
+                            childrenDetailsField.querySelector('textarea').value = '';
                         }
+                        toggleChildrenDetails();
                     }
-                    // Bootstrap Select fires 'changed.bs.select'
+
+                    childrenInput.addEventListener('input', toggleChildrenDetails);
                     $(maritalSelect).on('changed.bs.select change', toggleChildren);
+                    toggleChildrenDetails();
                 });
             </script>
 
             <div class="form-group row">
                 <div class="col-md-6">
                     <label>{{translate('Height')}} <small>({{ translate('In Feet') }})</small></label>
-                    <input type="number" name="height" step="any" value="{{ $member->physical_attributes->height ?? '' }}" class="form-control" placeholder="{{translate('Height')}}">
+                    <input type="text" name="height" value="{{ $member->physical_attributes->height ?? '' }}" class="form-control" placeholder="{{translate('e.g. 5.10, 5.6')}}">
                 </div>
                 <div class="col-md-6">
                     <label>{{translate('Weight')}} <small>({{ translate('In Kg') }})</small></label>

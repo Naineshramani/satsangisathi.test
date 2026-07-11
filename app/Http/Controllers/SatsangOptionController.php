@@ -12,7 +12,8 @@ class SatsangOptionController extends Controller
     protected $categories = [
         'sect'             => 'Follower of (Sect)',
         'nitya_pooja'      => 'Nitya Pooja Daily',
-        'kanthi_tilak'     => 'Kanthi / Tilak Chandlo',
+        'kanthi'           => 'Wear Kanthi',
+        'tilak_chandlo'    => 'Wear Tilak Chandlo',
         'onion_garlic'     => 'Eat Onion / Garlic',
         'aarti'            => 'Perform Aarti / Ghar Sabha',
         'fasts'            => 'Observe Fasts',

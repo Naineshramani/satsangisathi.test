@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-physical">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Physical Attributes')}}</h5>
     </div>

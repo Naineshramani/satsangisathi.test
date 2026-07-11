@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-satsang">
     <div class="card-header">
         <h5 class="mb-0 h6">{{ translate('Satsang Details') }}</h5>
     </div>
@@ -40,11 +40,26 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label>{{ translate('Do you wear Kanthi / Tilak Chandlo?') }}</label>
-                    <select class="form-control aiz-selectpicker" name="wear_kanthi_tilak_id">
+                    <label>{{ translate('Do you wear Kanthi?') }}</label>
+                    <select class="form-control aiz-selectpicker" name="wear_kanthi_id">
                         <option value="">{{ translate('Select One') }}</option>
-                        @foreach ($satsang_kanthi_tilak as $opt)
-                            <option value="{{ $opt->id }}" {{ ($member->satsang_details->wear_kanthi_tilak_id ?? '') == $opt->id ? 'selected' : '' }}>
+                        @foreach ($satsang_kanthi as $opt)
+                            <option value="{{ $opt->id }}" {{ ($member->satsang_details->wear_kanthi_id ?? '') == $opt->id ? 'selected' : '' }}>
+                                {{ $opt->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            @php $gender = $member->member->gender ?? null; @endphp
+            <div class="form-group row" id="tilak_chandlo_row" @if($gender != 1) style="display:none;" @endif>
+                <div class="col-md-6">
+                    <label>{{ translate('Do you wear Tilak Chandlo?') }}</label>
+                    <select class="form-control aiz-selectpicker" name="wear_tilak_chandlo_id" id="wear_tilak_chandlo_select">
+                        <option value="">{{ translate('Select One') }}</option>
+                        @foreach ($satsang_tilak_chandlo as $opt)
+                            <option value="{{ $opt->id }}" {{ ($member->satsang_details->wear_tilak_chandlo_id ?? '') == $opt->id ? 'selected' : '' }}>
                                 {{ $opt->name }}
                             </option>
                         @endforeach
@@ -125,3 +140,28 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function syncTilakRow(genderVal) {
+        var row = document.getElementById('tilak_chandlo_row');
+        if (!row) return;
+        if (String(genderVal) === '1') {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+            var sel = document.getElementById('wear_tilak_chandlo_select');
+            if (sel) { sel.value = ''; AIZ.plugins.bootstrapSelect('refresh'); }
+        }
+    }
+
+    var genderInput = document.querySelector('input[name="gender"]');
+    if (genderInput) syncTilakRow(genderInput.value);
+
+    var genderSelect = document.querySelector('select[name="gender"]');
+    if (genderSelect) {
+        genderSelect.addEventListener('change', function () { syncTilakRow(this.value); });
+        $(genderSelect).on('changed.bs.select', function () { syncTilakRow(this.value); });
+    }
+});
+</script>

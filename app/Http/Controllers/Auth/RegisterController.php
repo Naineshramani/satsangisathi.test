@@ -212,6 +212,9 @@ class RegisterController extends Controller
             $user->save();
         }
 
+        $user->whatsapp_consent = $request->has('whatsapp_consent') ? 1 : 0;
+        $user->save();
+
         auth()->login($user);
 
         try {

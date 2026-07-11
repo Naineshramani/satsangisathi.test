@@ -35,6 +35,7 @@ use App\Http\Controllers\ReportedUserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\DegreeLevelController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\SubCasteController;
 use App\Http\Controllers\UpdateController;
@@ -212,6 +213,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::resource('marital-statuses', MaritalStatusController::class)->except(['destroy']);
     Route::get('/marital-statuses/destroy/{id}', [MaritalStatusController::class, 'destroy'])->name('marital-statuses.destroy');
+
+    Route::resource('degree-levels', DegreeLevelController::class)->except(['destroy']);
+    Route::get('/degree-levels/destroy/{id}', [DegreeLevelController::class, 'destroy'])->name('degree-levels.destroy');
 
     // Annual Slary Range
     Route::resource('/annual-salaries', AnnualSalaryRangeyController::class)->except(['destroy']);

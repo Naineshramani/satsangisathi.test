@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" id="sec-spiritual">
     <div class="card-header">
         <h5 class="mb-0 h6">{{translate('Spiritual & Social Background')}}</h5>
     </div>
@@ -14,9 +14,10 @@
           {{-- Ethnicity & community_value hidden — not needed --}}
           <input type="hidden" name="ethnicity" value="{{ $member->spiritual_backgrounds->ethnicity ?? '' }}">
           <input type="hidden" name="community_value" value="">
+          <input type="hidden" name="personal_value" value="{{ $member->spiritual_backgrounds->personal_value ?? '' }}">
 
           <div class="form-group row">
-              <div class="col-md-3">
+              <div class="col-md-4">
                   <label for="member_caste_id">{{translate('Caste')}}</label>
                   <select class="form-control aiz-selectpicker" name="member_caste_id" id="member_caste_id" data-live-search="true">
                       <option value="">{{translate('Select One')}}</option>
@@ -25,11 +26,7 @@
                       <small class="form-text text-danger">{{ $message }}</small>
                   @enderror
               </div>
-              <div class="col-md-3">
-                  <label for="personal_value">{{translate('Personal Value')}}</label>
-                  <input type="text" name="personal_value" value="{{$member->spiritual_backgrounds->personal_value ?? "" }}" class="form-control" placeholder="{{translate('Personal Value')}}">
-              </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                   <label for="family_value_id">{{translate('Family Value')}}</label>
                   <select class="form-control aiz-selectpicker" name="family_value_id" data-selected="{{ $member->spiritual_backgrounds->family_value_id ?? '' }}" data-live-search="true">
                       <option value="">{{translate('Select One')}}</option>
@@ -38,7 +35,7 @@
                       @endforeach
                   </select>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                   <label for="family_status_id">{{translate('Family Status')}}</label>
                   <select class="form-control aiz-selectpicker" name="family_status_id" data-live-search="true">
                       <option value="">{{translate('Select One')}}</option>
@@ -57,4 +54,3 @@
       </form>
     </div>
 </div>
-
