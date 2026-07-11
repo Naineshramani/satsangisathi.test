@@ -22,6 +22,15 @@
                     </a>
                 </li>
 
+                @can('support_lookup')
+                <li class="aiz-side-nav-item">
+                    <a href="{{ route('support_lookup.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['support_lookup.index']) }}">
+                        <i class="las la-headset aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{ translate('Support Lookup') }}</span>
+                    </a>
+                </li>
+                @endcan
+
                 <!-- Member Manage -->
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">

@@ -110,6 +110,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/reported/destroy/{id}', 'destroy')->name('report_destrot.destroy');
     });
 
+    // Support lookup (search by registered mobile number for phone support)
+    Route::get('/support-lookup', [\App\Http\Controllers\SupportLookupController::class, 'index'])->name('support_lookup.index');
+
     // Bulk member
     Route::controller(MemberBulkAddController::class)->group(function () {
         Route::get('/member-bulk-add/index', 'index')->name('member_bulk_add.index');
