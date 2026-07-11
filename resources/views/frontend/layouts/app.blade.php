@@ -272,9 +272,9 @@ $lang = \App\Models\Language::where('code', $locale)->first();
             font-family: 'Playfair Display', Georgia, serif !important;
             letter-spacing: 0.01em;
         }
-        /* Keep nav & buttons in Poppins */
-        .aiz-navbar *, .btn, .top-navbar *,
-        .border-top *, .aiz-side-nav-link {
+        /* Keep nav & buttons in Poppins (but not icon-font <i> tags) */
+        .aiz-navbar *:not(i), .btn, .top-navbar *:not(i),
+        .border-top *:not(i), .aiz-side-nav-link {
             font-family: 'Poppins', sans-serif !important;
         }
 
