@@ -116,6 +116,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     // Analytics dashboard (KPIs and summary)
     Route::get('/analytics-dashboard', [\App\Http\Controllers\AnalyticsDashboardController::class, 'index'])->name('analytics_dashboard.index');
 
+    // Member report with interlinked multi-select slicers
+    Route::get('/member-report', [\App\Http\Controllers\MemberReportController::class, 'index'])->name('member_report.index');
+    Route::post('/member-report/data', [\App\Http\Controllers\MemberReportController::class, 'data'])->name('member_report.data');
+
     // Bulk member
     Route::controller(MemberBulkAddController::class)->group(function () {
         Route::get('/member-bulk-add/index', 'index')->name('member_bulk_add.index');

@@ -40,6 +40,15 @@
                 </li>
                 @endcan
 
+                @can('member_report')
+                <li class="aiz-side-nav-item">
+                    <a href="{{ route('member_report.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['member_report.index']) }}">
+                        <i class="las la-filter aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{ translate('Member Report') }}</span>
+                    </a>
+                </li>
+                @endcan
+
                 <!-- Member Manage -->
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">
