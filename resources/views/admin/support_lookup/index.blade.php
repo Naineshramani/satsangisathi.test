@@ -44,9 +44,14 @@
         <div class="card mb-4">
             <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
                 <h5 class="mb-0 h6">{{ translate('Member Summary') }}</h5>
-                <a href="{{ route('members.show', encrypt($member->id)) }}" target="_blank" class="btn btn-sm btn-light">
-                    {{ translate('Open Full Profile') }}
-                </a>
+                <div>
+                    <a href="{{ route('members.show', encrypt($member->id)) }}" target="_blank" class="btn btn-sm btn-light">
+                        {{ translate('Open Full Profile') }}
+                    </a>
+                    <a href="{{ route('members.biodata_pdf', encrypt($member->id)) }}" class="btn btn-sm btn-light">
+                        <i class="las la-file-pdf mr-1"></i>{{ translate('Download Biodata (PDF)') }}
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">

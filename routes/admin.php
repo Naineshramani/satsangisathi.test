@@ -82,6 +82,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/members-block', 'block')->name('members.block');
         Route::post('/members-blocking_reason', 'blocking_reason')->name('members.blocking_reason');
         Route::get('/members-login/{id}', 'login')->name('members.login');
+        Route::get('/members/{id}/biodata-pdf', 'biodata_pdf')->name('members.biodata_pdf');
 
         Route::get('/deleted_members', 'deleted_members')->name('deleted_members');
         Route::get('/members/destroy/{id}', 'destroy')->name('members.destroy');

@@ -60,7 +60,7 @@ class MemberController extends Controller
         $this->middleware(['permission:create_member'])->only('create');
         $this->middleware(['permission:edit_member'])->only('edit');
         $this->middleware(['permission:delete_member'])->only('destroy');
-        $this->middleware(['permission:view_member_profile'])->only('show');
+        $this->middleware(['permission:view_member_profile'])->only(['show', 'biodata_pdf']);
         $this->middleware(['permission:block_member'])->only('block');
         $this->middleware(['permission:update_member_package'])->only('package_info');
         $this->middleware(['permission:login_as_member'])->only('login');
@@ -358,6 +358,17 @@ class MemberController extends Controller
         $additional_attributes  = AdditionalAttribute::where('status', 1)->get();
 
         return view('admin.members.view', compact('member', 'present_address', 'educations', 'careers', 'permanent_address', 'additional_attributes'));
+    }
+
+    public function biodata_pdf($id)
+    {
+        $user = User::findOrFail(decrypt($id));
+
+        $fileName = \Illuminate\Support\Str::slug($user->first_name . ' ' . $user->last_name . ' ' . $user->code) . '-biodata.pdf';
+
+        return \PDF::loadView('admin.members.biodata_pdf', compact('user'), [], [
+            'format' => 'A4',
+        ])->download($fileName);
     }
 
     /**
