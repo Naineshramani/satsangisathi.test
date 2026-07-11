@@ -58,12 +58,12 @@
     table.details td { padding: 0.6mm 2mm; vertical-align: top; font-size: 9pt; }
     table.details td.label { width: 34%; color: #7a3e00; font-weight: bold; }
     table.details td.label2 { width: 16%; color: #7a3e00; font-weight: bold; }
-    .identity-box { width: 100%; margin-bottom: 2mm; }
-    .identity-box .photo-cell { width: 22mm; vertical-align: top; }
+    .identity-box { width: 100%; margin-bottom: 2mm; table-layout: fixed; }
+    .identity-box .photo-cell { width: 24mm; vertical-align: top; }
     .identity-box .photo-cell img {
-        width: 20mm; height: 24mm; object-fit: cover; border: 1.5px solid #c9a24b;
+        border: 1.5px solid #c9a24b;
     }
-    .identity-box .name-cell { vertical-align: top; padding-left: 4mm; }
+    .identity-box .name-cell { width: auto; vertical-align: top; padding-left: 4mm; }
     .identity-box .name-cell .name { font-size: 18pt; font-weight: bold; color: #7a3e00; }
     .identity-box .name-cell .code { font-size: 8.5pt; color: #8b0000; margin-bottom: 1.5mm; }
     .identity-box .name-cell .summary-line { font-size: 9pt; text-align: justify; }
@@ -110,9 +110,9 @@
         <tr>
             <td class="photo-cell">
                 @if (show_profile_picture($user) && $user->photo)
-                    <img src="{{ uploaded_asset($user->photo) }}">
+                    <img src="{{ uploaded_asset($user->photo) }}" width="76" height="90">
                 @else
-                    <img src="{{ static_asset($m->gender == 2 ? 'assets/img/female-avatar-place.png' : 'assets/img/avatar-place.png') }}">
+                    <img src="{{ static_asset($m->gender == 2 ? 'assets/img/female-avatar-place.png' : 'assets/img/avatar-place.png') }}" width="76" height="90">
                 @endif
             </td>
             <td class="name-cell">
