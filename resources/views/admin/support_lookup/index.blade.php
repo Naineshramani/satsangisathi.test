@@ -151,11 +151,9 @@
 
         {{-- Interests Sent --}}
         @php
-            $sender_biodata_link = \Illuminate\Support\Facades\URL::temporarySignedRoute(
-                'member.public_biodata_pdf',
-                now()->addDays(30),
-                ['id' => $member->id]
-            );
+            $sender_short_link = \App\Models\ShortLink::findOrCreateFor('biodata', $member->id, 30);
+            $sender_biodata_link = route('member.short_biodata_pdf', $sender_short_link->token);
+            $sender_full_name = trim($member->first_name . ' ' . $member->last_name);
         @endphp
         <div class="card mb-4">
             <div class="card-header bg-dark text-white">
@@ -177,7 +175,8 @@
                             @forelse ($data['interests_sent'] as $i)
                                 @php
                                     $target_phone_digits = preg_replace('/\D+/', '', optional($i->target)->phone ?? '');
-                                    $wa_message = "Jai Swaminarayan " . optional($i->target)->first_name . ", you got interest request from " . $member->first_name . ". Please find biodata at " . $sender_biodata_link . ". Login to your account on www.satsangisathi.in to Accept or reject";
+                                    $target_full_name = trim(optional($i->target)->first_name . ' ' . optional($i->target)->last_name);
+                                    $wa_message = "Jai Swaminarayan " . $target_full_name . ", you got interest request from " . $sender_full_name . ". Please find biodata at " . $sender_biodata_link . ". Login to your account on www.satsangisathi.in to Accept or reject";
                                     $wa_link = $target_phone_digits ? 'https://wa.me/' . $target_phone_digits . '?text=' . urlencode($wa_message) : null;
                                 @endphp
                                 <tr>

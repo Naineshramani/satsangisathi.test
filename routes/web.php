@@ -118,6 +118,7 @@ Route::get('/packages', [PackageController::class, 'select_package'])->name('pac
 
 // Publicly shareable biodata PDF (signed link, no login required)
 Route::get('/biodata/{id}', [MemberController::class, 'public_biodata_pdf'])->name('member.public_biodata_pdf')->middleware('signed');
+Route::get('/bio/{token}', [MemberController::class, 'short_biodata_pdf'])->name('member.short_biodata_pdf');
 
 //Blog
 Route::controller(BlogController::class)->group(function () {

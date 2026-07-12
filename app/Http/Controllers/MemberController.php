@@ -388,6 +388,27 @@ class MemberController extends Controller
     }
 
     /**
+     * Short-token version of public_biodata_pdf, for compact shareable
+     * links (e.g. WhatsApp messages) instead of a long signed URL.
+     */
+    public function short_biodata_pdf($token)
+    {
+        $link = \App\Models\ShortLink::where('token', $token)->where('type', 'biodata')->first();
+
+        if (!$link || $link->isExpired()) {
+            abort(404);
+        }
+
+        $user = User::findOrFail($link->target_id);
+
+        $fileName = \Illuminate\Support\Str::slug($user->first_name . ' ' . $user->last_name . ' ' . $user->code) . '-biodata.pdf';
+
+        return \PDF::loadView('admin.members.biodata_pdf', compact('user'), [], [
+            'format' => 'A4',
+        ])->stream($fileName);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
