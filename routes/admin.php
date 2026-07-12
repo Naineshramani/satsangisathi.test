@@ -121,6 +121,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::get('/member-report', [\App\Http\Controllers\MemberReportController::class, 'index'])->name('member_report.index');
     Route::post('/member-report/data', [\App\Http\Controllers\MemberReportController::class, 'data'])->name('member_report.data');
 
+    // Interest exchange report (all interest requests, latest first, with WhatsApp biodata sharing)
+    Route::get('/interest-exchange', [\App\Http\Controllers\InterestExchangeController::class, 'index'])->name('interest_exchange.index');
+
     // Bulk member
     Route::controller(MemberBulkAddController::class)->group(function () {
         Route::get('/member-bulk-add/index', 'index')->name('member_bulk_add.index');

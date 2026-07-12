@@ -49,6 +49,15 @@
                 </li>
                 @endcan
 
+                @can('interest_exchange_report')
+                <li class="aiz-side-nav-item">
+                    <a href="{{ route('interest_exchange.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['interest_exchange.index']) }}">
+                        <i class="las la-heart aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{ translate('Interest Exchange') }}</span>
+                    </a>
+                </li>
+                @endcan
+
                 <!-- Member Manage -->
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">
