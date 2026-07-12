@@ -30,12 +30,12 @@
         background: #8b0000;
         color: #f5e6c8;
         text-align: center;
-        padding-top: 4mm;
+        padding-top: 3mm;
         font-size: 8pt;
     }
-    .site-footer .site-name {
+    .site-footer .tagline {
         font-weight: bold;
-        font-size: 10pt;
+        font-size: 9.5pt;
         color: #ffd77a;
     }
     .page-frame {
@@ -59,14 +59,14 @@
     table.details td.label { width: 34%; color: #7a3e00; font-weight: bold; }
     table.details td.label2 { width: 16%; color: #7a3e00; font-weight: bold; }
     .identity-box { width: 100%; margin-bottom: 2mm; table-layout: fixed; }
-    .identity-box .photo-cell { width: 24mm; vertical-align: top; }
+    .identity-box .photo-cell { width: 32mm; vertical-align: top; }
     .identity-box .photo-cell img {
         border: 1.5px solid #c9a24b;
     }
-    .identity-box .name-cell { width: auto; vertical-align: top; padding-left: 4mm; }
-    .identity-box .name-cell .name { font-size: 18pt; font-weight: bold; color: #7a3e00; }
-    .identity-box .name-cell .code { font-size: 8.5pt; color: #8b0000; margin-bottom: 1.5mm; }
-    .identity-box .name-cell .summary-line { font-size: 9pt; text-align: justify; }
+    .identity-box .name-cell { width: auto; vertical-align: middle; padding-left: 4mm; }
+    .identity-box .name-cell .name { font-size: 22pt; font-weight: bold; color: #7a3e00; line-height: 1.15; }
+    .identity-box .name-cell .code { font-size: 10pt; font-weight: bold; color: #8b0000; margin: 1mm 0 2mm 0; }
+    .identity-box .name-cell .summary-line { font-size: 11pt; font-weight: bold; color: #4a2e00; }
     .paragraph { font-size: 9pt; text-align: justify; padding: 0.5mm 2mm; }
 </style>
 </head>
@@ -74,16 +74,31 @@
 
 <div class="site-header">
     @if (get_setting('header_logo'))
-        <img src="{{ uploaded_asset(get_setting('header_logo')) }}" style="height:12mm;">
+        <img src="{{ uploaded_asset(get_setting('header_logo')) }}" width="164" height="45">
     @endif
 </div>
 
+@php
+    $footer_phones = collect(json_decode(get_setting('footer_phones') ?? '[]'))->implode(' / ');
+@endphp
 <div class="site-footer">
-    <div class="site-name">{{ get_setting('site_name') ?: 'Satsangi Sathi' }}</div>
-    <div>{{ preg_replace('#^https?://#', '', rtrim(env('APP_URL'), '/')) }}
-        @if (get_setting('footer_email')) &nbsp;|&nbsp; {{ get_setting('footer_email') }} @endif
-        @if (get_setting('footer_address')) &nbsp;|&nbsp; {{ get_setting('footer_address') }} @endif
-    </div>
+    <table style="width:100%;">
+        <tr>
+            <td style="width:16mm;text-align:left;vertical-align:middle;">
+                @if (get_setting('header_logo'))
+                    <img src="{{ uploaded_asset(get_setting('header_logo')) }}" width="138" height="38">
+                @endif
+            </td>
+            <td style="text-align:center;vertical-align:middle;">
+                <div class="tagline">{{ translate('For more info and more profiles visit www.satsangisathi.in') }}</div>
+                <div>
+                    {{ get_setting('footer_email') ?: 'Info@satsangisathi.in' }}
+                    @if ($footer_phones) &nbsp;|&nbsp; {{ $footer_phones }} @endif
+                </div>
+            </td>
+            <td style="width:16mm;"></td>
+        </tr>
+    </table>
 </div>
 
 <div class="page-frame">
@@ -110,9 +125,9 @@
         <tr>
             <td class="photo-cell">
                 @if (show_profile_picture($user) && $user->photo)
-                    <img src="{{ uploaded_asset($user->photo) }}" width="76" height="90">
+                    <img src="{{ uploaded_asset($user->photo) }}" width="103" height="122">
                 @else
-                    <img src="{{ static_asset($m->gender == 2 ? 'assets/img/female-avatar-place.png' : 'assets/img/avatar-place.png') }}" width="76" height="90">
+                    <img src="{{ static_asset($m->gender == 2 ? 'assets/img/female-avatar-place.png' : 'assets/img/avatar-place.png') }}" width="103" height="122">
                 @endif
             </td>
             <td class="name-cell">
