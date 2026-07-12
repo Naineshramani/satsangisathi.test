@@ -366,9 +366,7 @@ class MemberController extends Controller
 
         $fileName = \Illuminate\Support\Str::slug($user->first_name . ' ' . $user->last_name . ' ' . $user->code) . '-biodata.pdf';
 
-        return \PDF::loadView('admin.members.biodata_pdf', compact('user'), [], [
-            'format' => 'A4',
-        ])->download($fileName);
+        return $this->biodata_pdf_instance($user)->download($fileName);
     }
 
     /**
@@ -382,9 +380,7 @@ class MemberController extends Controller
 
         $fileName = \Illuminate\Support\Str::slug($user->first_name . ' ' . $user->last_name . ' ' . $user->code) . '-biodata.pdf';
 
-        return \PDF::loadView('admin.members.biodata_pdf', compact('user'), [], [
-            'format' => 'A4',
-        ])->stream($fileName);
+        return $this->biodata_pdf_instance($user)->stream($fileName);
     }
 
     /**
@@ -403,9 +399,36 @@ class MemberController extends Controller
 
         $fileName = \Illuminate\Support\Str::slug($user->first_name . ' ' . $user->last_name . ' ' . $user->code) . '-biodata.pdf';
 
+        return $this->biodata_pdf_instance($user)->stream($fileName);
+    }
+
+    /**
+     * Builds the biodata Pdf instance, wiring up mPDF's repeating
+     * HTML header/footer (SetHTMLHeader/SetHTMLFooter) so the footer
+     * appears on every page. Margins are set via the mPDF constructor
+     * (not an `@page` CSS rule) -- mPDF's CSS Paged Media engine wipes
+     * any programmatically-set HTMLHeader/HTMLFooter on every page
+     * once an `@page` rule is present, unless a named page footer is
+     * also declared in that CSS.
+     */
+    private function biodata_pdf_instance(User $user)
+    {
+        $headerHtml = view('admin.members.biodata_pdf_header')->render();
+        $footerHtml = view('admin.members.biodata_pdf_footer')->render();
+
         return \PDF::loadView('admin.members.biodata_pdf', compact('user'), [], [
             'format' => 'A4',
-        ])->stream($fileName);
+            'margin_top' => 18,
+            'margin_right' => 14,
+            'margin_bottom' => 22,
+            'margin_left' => 14,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'instanceConfigurator' => function ($mpdf) use ($headerHtml, $footerHtml) {
+                $mpdf->SetHTMLHeader($headerHtml);
+                $mpdf->SetHTMLFooter(['html' => $footerHtml, 'h' => 15]);
+            },
+        ]);
     }
 
     /**

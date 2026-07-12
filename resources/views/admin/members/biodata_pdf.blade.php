@@ -2,41 +2,13 @@
 <html>
 <head>
 <style>
-    @page {
-        margin: 18mm 14mm 22mm 14mm;
-        background-color: #fdf6e3;
-    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         font-family: 'DejaVuSans', sans-serif;
         color: #4a2e00;
         font-size: 9pt;
         line-height: 1.35;
-    }
-    .site-header {
-        position: fixed;
-        top: -14mm;
-        left: 0;
-        right: 0;
-        height: 12mm;
-        text-align: right;
-    }
-    .site-footer {
-        position: fixed;
-        bottom: -18mm;
-        left: -14mm;
-        right: -14mm;
-        height: 15mm;
-        background: #8b0000;
-        color: #f5e6c8;
-        text-align: center;
-        padding-top: 3mm;
-        font-size: 8pt;
-    }
-    .site-footer .tagline {
-        font-weight: bold;
-        font-size: 9.5pt;
-        color: #ffd77a;
+        background-color: #fdf6e3;
     }
     .page-frame {
         border: 2px solid #c9a24b;
@@ -63,43 +35,15 @@
     .identity-box .photo-cell img {
         border: 1.5px solid #c9a24b;
     }
-    .identity-box .name-cell { width: auto; vertical-align: middle; padding-left: 4mm; }
-    .identity-box .name-cell .name { font-size: 22pt; font-weight: bold; color: #7a3e00; line-height: 1.15; }
-    .identity-box .name-cell .code { font-size: 10pt; font-weight: bold; color: #8b0000; margin: 1mm 0 2mm 0; }
-    .identity-box .name-cell .summary-line { font-size: 11pt; font-weight: bold; color: #4a2e00; }
+    .identity-box .name-cell { width: auto; vertical-align: top; padding-left: 4mm; }
+    .identity-box .name-cell .name { font-size: 22pt; font-weight: bold; color: #7a3e00; line-height: 1.15; margin-bottom: 1.5mm; }
+    .identity-details { margin-top: 1mm; }
+    .identity-details td { padding: 0.5mm 1.5mm; }
+    .identity-details td.label2 { width: 27%; white-space: nowrap; }
     .paragraph { font-size: 9pt; text-align: justify; padding: 0.5mm 2mm; }
 </style>
 </head>
 <body>
-
-<div class="site-header">
-    @if (get_setting('header_logo'))
-        <img src="{{ uploaded_asset(get_setting('header_logo')) }}" width="164" height="45">
-    @endif
-</div>
-
-@php
-    $footer_phones = collect(json_decode(get_setting('footer_phones') ?? '[]'))->implode(' / ');
-@endphp
-<div class="site-footer">
-    <table style="width:100%;">
-        <tr>
-            <td style="width:16mm;text-align:left;vertical-align:middle;">
-                @if (get_setting('header_logo'))
-                    <img src="{{ uploaded_asset(get_setting('header_logo')) }}" width="138" height="38">
-                @endif
-            </td>
-            <td style="text-align:center;vertical-align:middle;">
-                <div class="tagline">{{ translate('For more info and more profiles visit www.satsangisathi.in') }}</div>
-                <div>
-                    {{ get_setting('footer_email') ?: 'Info@satsangisathi.in' }}
-                    @if ($footer_phones) &nbsp;|&nbsp; {{ $footer_phones }} @endif
-                </div>
-            </td>
-            <td style="width:16mm;"></td>
-        </tr>
-    </table>
-</div>
 
 <div class="page-frame">
 <div class="page-frame-inner">
@@ -113,12 +57,38 @@
         $satsang_opt = function ($id) {
             return $id ? optional(\App\Models\SatsangOption::find($id))->name : '-';
         };
-        $summary_parts = array_filter([
-            $age ? $age . ' ' . translate('yrs') : null,
-            $m->gender == 1 ? translate('Male') : ($m->gender == 2 ? translate('Female') : null),
-            optional($m->marital_status)->name,
-            optional($user->physical_attributes)->height,
+
+        $marital_status_name = optional($m->marital_status)->name;
+
+        $height_raw = optional($user->physical_attributes)->height;
+        $height_display = '-';
+        if (!empty($height_raw)) {
+            if (str_contains($height_raw, '.')) {
+                [$height_ft, $height_in] = explode('.', $height_raw, 2);
+                $height_display = $height_ft . ' ft ' . $height_in . ' in';
+            } else {
+                $height_display = $height_raw . ' ft';
+            }
+        }
+
+        $weight_raw = optional($user->physical_attributes)->weight;
+        $weight_display = ($weight_raw !== null && $weight_raw !== '')
+            ? rtrim(rtrim(number_format((float) $weight_raw, 2, '.', ''), '0'), '.') . ' ' . translate('Kg')
+            : '-';
+
+        $identity_fields = collect([
+            ['label' => translate('Member ID'), 'value' => $user->code],
+            ['label' => translate('Age'), 'value' => $age ? $age . ' ' . translate('yrs') : '-'],
+            ['label' => translate('Date of Birth'), 'value' => !empty($m->birthday) ? \Carbon\Carbon::parse($m->birthday)->format('d M Y') : '-'],
+            ['label' => translate('Gender'), 'value' => $m->gender == 1 ? translate('Male') : ($m->gender == 2 ? translate('Female') : '-')],
+            ['label' => translate('Marital Status'), 'value' => $marital_status_name ?: '-'],
         ]);
+        if ($marital_status_name && \Illuminate\Support\Str::contains(strtolower($marital_status_name), ['widow', 'divorc'])) {
+            $identity_fields->push(['label' => translate('No. of Children'), 'value' => $m->children ?? '-']);
+        }
+        $identity_fields->push(['label' => translate('Height'), 'value' => $height_display]);
+        $identity_fields->push(['label' => translate('Weight'), 'value' => $weight_display]);
+        $identity_rows = $identity_fields->chunk(2)->map(fn ($chunk) => $chunk->values());
     @endphp
 
     <table class="identity-box">
@@ -132,8 +102,21 @@
             </td>
             <td class="name-cell">
                 <div class="name">{{ $user->first_name }} {{ $user->last_name }}</div>
-                <div class="code">{{ translate('Member ID') }}: {{ $user->code }}</div>
-                <div class="summary-line">{{ implode('   |   ', $summary_parts) }}</div>
+                <table class="details identity-details">
+                    @foreach ($identity_rows as $pair)
+                        <tr>
+                            <td class="label2">{{ $pair[0]['label'] }}</td>
+                            <td>{{ $pair[0]['value'] }}</td>
+                            @if (isset($pair[1]))
+                                <td class="label2">{{ $pair[1]['label'] }}</td>
+                                <td>{{ $pair[1]['value'] }}</td>
+                            @else
+                                <td class="label2"></td>
+                                <td></td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </table>
             </td>
         </tr>
     </table>
@@ -142,18 +125,6 @@
         <h2 class="section-title">{{ translate('About') }}</h2>
         <div class="paragraph">{{ $m->introduction }}</div>
     @endif
-
-    <h2 class="section-title">{{ translate('Basic Information') }}</h2>
-    <table class="details">
-        <tr>
-            <td class="label">{{ translate('Date of Birth') }}</td>
-            <td>{{ !empty($m->birthday) ? \Carbon\Carbon::parse($m->birthday)->format('d M Y') : '-' }}</td>
-        </tr>
-        <tr>
-            <td class="label">{{ translate('No. of Children') }}</td>
-            <td>{{ $m->children ?? '-' }}</td>
-        </tr>
-    </table>
 
     <h2 class="section-title">{{ translate('Satsang Details') }}</h2>
     <table class="details">
