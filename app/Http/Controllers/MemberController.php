@@ -372,6 +372,22 @@ class MemberController extends Controller
     }
 
     /**
+     * Publicly shareable biodata PDF, access controlled by the URL's
+     * signature (see the 'signed' middleware) rather than login --
+     * used for links sent to non-admin recipients (e.g. WhatsApp).
+     */
+    public function public_biodata_pdf($id)
+    {
+        $user = User::findOrFail($id);
+
+        $fileName = \Illuminate\Support\Str::slug($user->first_name . ' ' . $user->last_name . ' ' . $user->code) . '-biodata.pdf';
+
+        return \PDF::loadView('admin.members.biodata_pdf', compact('user'), [], [
+            'format' => 'A4',
+        ])->stream($fileName);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

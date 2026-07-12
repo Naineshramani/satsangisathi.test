@@ -116,6 +116,9 @@ Route::controller(VerificationController::class)->group(function () {
 Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
 Route::get('/packages', [PackageController::class, 'select_package'])->name('packages');
 
+// Publicly shareable biodata PDF (signed link, no login required)
+Route::get('/biodata/{id}', [MemberController::class, 'public_biodata_pdf'])->name('member.public_biodata_pdf')->middleware('signed');
+
 //Blog
 Route::controller(BlogController::class)->group(function () {
     Route::get('/blog', 'all_blog')->name('blog');

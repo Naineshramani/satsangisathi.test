@@ -150,6 +150,13 @@
         </div>
 
         {{-- Interests Sent --}}
+        @php
+            $sender_biodata_link = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'member.public_biodata_pdf',
+                now()->addDays(30),
+                ['id' => $member->id]
+            );
+        @endphp
         <div class="card mb-4">
             <div class="card-header bg-dark text-white">
                 <h5 class="mb-0 h6">{{ translate('Interest Sent') }} ({{ $data['interests_sent']->count() }})</h5>
@@ -168,10 +175,23 @@
                         </thead>
                         <tbody>
                             @forelse ($data['interests_sent'] as $i)
+                                @php
+                                    $target_phone_digits = preg_replace('/\D+/', '', optional($i->target)->phone ?? '');
+                                    $wa_message = "Jai Swaminarayan " . optional($i->target)->first_name . ", you got interest request from " . $member->first_name . ". Please find biodata at " . $sender_biodata_link . ". Login to your account on www.satsangisathi.in to Accept or reject";
+                                    $wa_link = $target_phone_digits ? 'https://wa.me/' . $target_phone_digits . '?text=' . urlencode($wa_message) : null;
+                                @endphp
                                 <tr>
                                     <td>{{ optional($i->target)->first_name }} {{ optional($i->target)->last_name }}</td>
                                     <td>{{ optional($i->target)->code }}</td>
-                                    <td>{{ optional($i->target)->phone }}</td>
+                                    <td>
+                                        @if ($wa_link)
+                                            <a href="{{ $wa_link }}" target="_blank" title="{{ translate('Send via WhatsApp with biodata link') }}">
+                                                <i class="lab la-whatsapp text-success mr-1"></i>{{ optional($i->target)->phone }}
+                                            </a>
+                                        @else
+                                            {{ optional($i->target)->phone }}
+                                        @endif
+                                    </td>
                                     <td>
                                         @if ($i->status == 1)
                                             <span class="badge badge-inline badge-success">{{ translate('Accepted') }}</span>
