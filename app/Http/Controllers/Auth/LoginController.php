@@ -117,7 +117,14 @@ class LoginController extends Controller
                 flash(translate('Registration successfull.'))->success();
             }
         }
-        
+
+        if (auth()->user() != null) {
+            $loggedInUser = auth()->user();
+            $loggedInUser->last_login_at = now();
+            $loggedInUser->last_login_ip = $request->ip();
+            $loggedInUser->save();
+        }
+
         if (session('link') != null) {
             return redirect(session('link'));
         } else {
@@ -167,7 +174,13 @@ class LoginController extends Controller
             auth()->login($existing_or_new_user, true);
         }
 
-        
+        if (auth()->user() != null) {
+            $loggedInUser = auth()->user();
+            $loggedInUser->last_login_at = now();
+            $loggedInUser->last_login_ip = $request->ip();
+            $loggedInUser->save();
+        }
+
         if (session('link') != null) {
             return redirect(session('link'));
         } else {

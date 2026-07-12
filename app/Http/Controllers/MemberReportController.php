@@ -58,6 +58,7 @@ class MemberReportController extends Controller
                 'u.first_name',
                 'u.last_name',
                 'u.phone',
+                'u.last_login_at',
                 'm.gender',
                 'm.birthday',
                 'ms.name as marital_status',
@@ -86,6 +87,9 @@ class MemberReportController extends Controller
                 $row->name = trim($row->first_name . ' ' . $row->last_name);
                 $row->age = !empty($row->birthday) ? \Carbon\Carbon::parse($row->birthday)->age : null;
                 $row->gender_label = $row->gender == 1 ? 'Male' : ($row->gender == 2 ? 'Female' : null);
+                $row->last_login = $row->last_login_at
+                    ? \Carbon\Carbon::parse($row->last_login_at)->format('d M Y, h:i A')
+                    : 'Never';
                 return $row;
             });
 

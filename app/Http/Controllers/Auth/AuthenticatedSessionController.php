@@ -32,6 +32,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $authUser = auth()->user();
+        if ($authUser != null) {
+            $authUser->last_login_at = now();
+            $authUser->last_login_ip = $request->ip();
+            $authUser->save();
+        }
+
         if (auth()->user() != null && (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff')) {
             $redirect_route = 'admin.dashboard';
         } else {

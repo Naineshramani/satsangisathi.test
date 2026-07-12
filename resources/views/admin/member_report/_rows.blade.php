@@ -13,7 +13,8 @@
         <td>{{ $r->education }}</td>
         <td>{{ $r->profession }}</td>
         <td>{{ $r->phone }}</td>
+        <td>{{ $r->last_login }}</td>
     </tr>
 @empty
-    <tr><td colspan="13" class="text-center">{{ translate('No members match the selected filters') }}</td></tr>
+    <tr><td colspan="14" class="text-center">{{ translate('No members match the selected filters') }}</td></tr>
 @endforelse

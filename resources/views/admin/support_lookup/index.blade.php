@@ -112,6 +112,16 @@
                                 <strong>{{ translate('Membership') }}:</strong>
                                 {{ $member->membership == 2 ? translate('Premium') : translate('Free') }}
                             </div>
+                            <div class="col-md-4 mb-2">
+                                <strong>{{ translate('Last Login') }}:</strong>
+                                @if ($member->last_login_at)
+                                    {{ \Carbon\Carbon::parse($member->last_login_at)->format('d M Y, h:i A') }}
+                                    <span class="opacity-60">({{ \Carbon\Carbon::parse($member->last_login_at)->diffForHumans() }})</span>
+                                @else
+                                    <span class="opacity-60">{{ translate('Never') }}</span>
+                                @endif
+                            </div>
+                            <div class="col-md-4 mb-2"><strong>{{ translate('Last Login IP') }}:</strong> {{ $member->last_login_ip ?? '-' }}</div>
 
                             <div class="col-md-4 mb-2"><strong>{{ translate('Package') }}:</strong> {{ optional(\App\Models\Package::find($m->current_package_id ?? null))->name ?? '-' }}</div>
                             <div class="col-md-4 mb-2"><strong>{{ translate('Package Validity') }}:</strong> {{ $m->package_validity ?? '-' }}</div>

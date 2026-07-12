@@ -125,6 +125,7 @@
                             <th>{{ translate('Education') }}</th>
                             <th>{{ translate('Profession') }}</th>
                             <th>{{ translate('Mobile No') }}</th>
+                            <th>{{ translate('Last Login') }}</th>
                         </tr>
                     </thead>
                     <tbody id="report_table_body">
@@ -157,7 +158,7 @@
 
     function renderRows(rows) {
         if (!rows.length) {
-            return '<tr><td colspan="13" class="text-center">{{ translate("No members match the selected filters") }}</td></tr>';
+            return '<tr><td colspan="14" class="text-center">{{ translate("No members match the selected filters") }}</td></tr>';
         }
         var html = '';
         rows.forEach(function (r) {
@@ -175,6 +176,7 @@
                 '<td>' + escapeHtml(r.education) + '</td>' +
                 '<td>' + escapeHtml(r.profession) + '</td>' +
                 '<td>' + escapeHtml(r.phone) + '</td>' +
+                '<td>' + escapeHtml(r.last_login) + '</td>' +
                 '</tr>';
         });
         return html;
