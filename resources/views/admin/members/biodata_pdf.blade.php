@@ -26,6 +26,15 @@
         font-size: 10pt;
         margin: 3mm 0 1.5mm 0;
     }
+    h1.name-title {
+        background: #f2e2b6;
+        color: #7a3e00;
+        border-left: 3px solid #8b0000;
+        padding: 1.5mm 3mm;
+        font-size: 18pt;
+        font-weight: bold;
+        margin: 0 0 2mm 0;
+    }
     table.details { width: 100%; border-collapse: collapse; margin-bottom: 1mm; }
     table.details td { padding: 0.6mm 2mm; vertical-align: top; font-size: 9pt; }
     table.details td.label { width: 34%; color: #7a3e00; font-weight: bold; }
@@ -36,7 +45,6 @@
         border: 1.5px solid #c9a24b;
     }
     .identity-box .name-cell { width: auto; vertical-align: top; padding-left: 4mm; }
-    .identity-box .name-cell .name { font-size: 22pt; font-weight: bold; color: #7a3e00; line-height: 1.15; margin-bottom: 1.5mm; }
     .identity-details { margin-top: 1mm; }
     .identity-details td { padding: 0.5mm 1.5mm; }
     .identity-details td.label2 { width: 27%; white-space: nowrap; }
@@ -91,6 +99,8 @@
         $identity_rows = $identity_fields->chunk(2)->map(fn ($chunk) => $chunk->values());
     @endphp
 
+    <h1 class="name-title">{{ $user->first_name }} {{ $user->last_name }}</h1>
+
     <table class="identity-box">
         <tr>
             <td class="photo-cell">
@@ -101,7 +111,6 @@
                 @endif
             </td>
             <td class="name-cell">
-                <div class="name">{{ $user->first_name }} {{ $user->last_name }}</div>
                 <table class="details identity-details">
                     @foreach ($identity_rows as $pair)
                         <tr>
