@@ -11,13 +11,7 @@
     }
 
     var iti = intlTelInput(input, {
-        initialCountry: "auto",
-        geoIpLookup: function(callback) {
-            $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                var countryCode = (resp && resp.country) ? resp.country : "us";
-                callback(countryCode);
-            });
-        },
+        initialCountry: "in",
         separateDialCode: true,
         utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
         onlyCountries: @php echo json_encode(\App\Models\Country::where('status', 1)->pluck('code')->toArray()) @endphp,

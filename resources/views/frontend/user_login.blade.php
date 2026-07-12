@@ -1,11 +1,11 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="py-4 py-lg-5">
+    <div class="py-5 bg-cover bg-center" style="background-image: url({{ uploaded_asset(get_setting('admin_login_background')) }})">
         <div class="container">
             <div class="row">
                 <div class="col-xxl-4 col-xl-5 col-md-7 mx-auto">
-                    <div class="card">
+                    <div class="card" style="background: rgba(255,255,255,0.25); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);">
                         <div class="card-body">
                             <div class="mb-5 text-center">
                                 <h1 class="h3 text-primary mb-0">{{ translate('Login to your account') }}</h1>
@@ -16,59 +16,41 @@
                                 <div class="form-group">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <label class="form-label" for="email">
-                                            {{ addon_activation('otp_system') ? translate('Email/Phone') : translate('Email or Mobile Number') }}
+                                            {{ translate('Email/Mobile Number') }}
                                         </label>
-                                        @if (addon_activation('otp_system'))
-                                            <button class="btn btn-link p-0 opacity-50 text-reset fs-12" type="button"
-                                                onclick="toggleEmailPhone(this)">
-                                                {{ translate('Use Email Instead') }}
-                                            </button>
+                                        <button class="btn btn-link p-0 opacity-50 text-reset fs-12" type="button"
+                                            onclick="toggleEmailPhone(this)">
+                                            {{ translate('Use Email Instead') }}
+                                        </button>
+                                    </div>
+
+                                    <input type="hidden" name="email" id="finalInput" value="">
+
+                                    <!-- Phone Input (shown by default, with country code dropdown) -->
+                                    <div class="form-group phone-form-group mb-1">
+                                        <input type="tel" id="phone-code"
+                                            class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                            value="{{ old('email') }}" placeholder="{{ translate('Mobile Number') }}"
+                                            autocomplete="off">
+                                        @if ($errors->has('email'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
 
-                                    <!-- Phone Input -->
-                                    @if (addon_activation('otp_system'))
-                                        <input type="hidden" name="email" id="finalInput" value="">
-
-                                        <div class="form-group phone-form-group mb-1">
-                                            <input type="tel" id="phone-code"
-                                                class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                                value="{{ old('email') }}" placeholder="{{ translate('Phone') }}"
-                                                autocomplete="off">
-                                            @if ($errors->has('email'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('email') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-
-                                        <!-- Email Input (hidden by default when OTP enabled) -->
-                                        <div class="form-group email-form-group mb-1 d-none">
-                                            <input type="email" id="email"
-                                                class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                                value="{{ old('email') }}" placeholder="{{ translate('Email') }}"
-                                                autocomplete="off">
-                                            @if ($errors->has('email'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('email') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    @else
-                                        <!-- Show only Email Input if addon is OFF -->
-                                        <div class="form-group email-form-group mb-1">
-                                            <input type="text" name="email" id="email"
-                                                class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                                value="{{ old('email') }}" placeholder="{{ translate('Email or Mobile Number') }}"
-                                                autocomplete="off">
-                                            @if ($errors->has('email'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('email') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    @endif
-
+                                    <!-- Email Input (hidden until toggled) -->
+                                    <div class="form-group email-form-group mb-1 d-none">
+                                        <input type="email" id="email"
+                                            class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                            value="{{ old('email') }}" placeholder="{{ translate('Email') }}"
+                                            autocomplete="off">
+                                        @if ($errors->has('email'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
 
 
@@ -169,22 +151,17 @@
 @endsection
 @section('script')
     <script>
-        var isOTPActive = {{ addon_activation('otp_system') ? 'true' : 'false' }};
         document.getElementById("myForm").addEventListener("submit", function(event) {
-            if (isOTPActive) {
-                if ($(".phone-form-group").hasClass("d-none")) {
-                    const emailInput = $("#email").val();
-                    $("#finalInput").val(emailInput);
-                } else {
-                    event.preventDefault();
-                    let fullNumber = iti.getNumber(); 
-                    $("#finalInput").val(fullNumber);
-                }
+            if ($(".phone-form-group").hasClass("d-none")) {
+                const emailInput = $("#email").val();
+                $("#finalInput").val(emailInput);
+            } else {
+                event.preventDefault();
+                let fullNumber = iti.getNumber();
+                $("#finalInput").val(fullNumber);
+                this.submit();
             }
-            this.submit();
         });
     </script>
-    @if (addon_activation('otp_system'))
-        @include('partials.emailOrPhone')
-    @endif
+    @include('partials.emailOrPhone')
 @endsection
