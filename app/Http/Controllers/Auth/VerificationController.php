@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\VerifiesEmails;
 use App\Http\Controllers\OTPVerificationController;
 use Carbon\Carbon;
 use App\Models\User;
@@ -22,14 +21,20 @@ class VerificationController extends Controller
     |
     */
 
-    use VerifiesEmails;
-
     /**
      * Where to redirect users after verification.
      *
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+    /**
+     * Where to redirect the user after verification.
+     */
+    protected function redirectPath()
+    {
+        return $this->redirectTo;
+    }
 
     /**
      * Create a new controller instance.
