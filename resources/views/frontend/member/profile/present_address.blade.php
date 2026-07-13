@@ -137,6 +137,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
+    var isCopyingAddress = false;
+
     // Permanent same as present
     var cbPerm = document.getElementById('same_as_present');
     cbPerm.addEventListener('change', function () {
@@ -144,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
         copyAddress('present', 'permanent', function(){});
     });
     $('#permanent_country_id, #permanent_state_id, #permanent_city_id').on('change', function () {
+        if (isCopyingAddress) return;
         cbPerm.checked = false;
     });
 
@@ -156,10 +159,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     $('#native_country_id, #native_state_id, #native_city_id').on('change', function () {
+        if (isCopyingAddress) return;
         cbNative.checked = false;
     });
 
     function copyAddress(src, dest, cb) {
+        isCopyingAddress = true;
         var srcCountry = $('#' + src + '_country_id').val();
         $('#' + dest + '_country_id').val(srcCountry).trigger('change');
         AIZ.plugins.bootstrapSelect('refresh');
@@ -171,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var srcCity = $('#' + src + '_city_id').val();
                 $('#' + dest + '_city_id').val(srcCity);
                 AIZ.plugins.bootstrapSelect('refresh');
+                isCopyingAddress = false;
                 if (cb) cb();
             }, 600);
         }, 600);
