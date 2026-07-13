@@ -56,10 +56,24 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-6">
-                    <label for="sun_sign">{{translate('Sun Sign')}}</label>
+                    <label>{{translate('Sun Sign')}}</label>
                     @php
-                        $user_sun_sign = !empty($member->astrologies->sun_sign) ? $member->astrologies->sun_sign : "";
-                        if (empty($user_sun_sign) && !empty($member->member->birthday)) {
+                        $sun_sign_labels = [
+                            'aries' => 'Aries (Mar 21 – Apr 19)',
+                            'taurus' => 'Taurus (Apr 20 – May 20)',
+                            'gemini' => 'Gemini (May 21 – Jun 20)',
+                            'cancer' => 'Cancer (Jun 21 – Jul 22)',
+                            'leo' => 'Leo (Jul 23 – Aug 22)',
+                            'virgo' => 'Virgo (Aug 23 – Sep 22)',
+                            'libra' => 'Libra (Sep 23 – Oct 22)',
+                            'scorpio' => 'Scorpio (Oct 23 – Nov 21)',
+                            'sagittarius' => 'Sagittarius (Nov 22 – Dec 21)',
+                            'capricorn' => 'Capricorn (Dec 22 – Jan 19)',
+                            'aquarius' => 'Aquarius (Jan 20 – Feb 18)',
+                            'pisces' => 'Pisces (Feb 19 – Mar 20)',
+                        ];
+                        $user_sun_sign = '';
+                        if (!empty($member->member->birthday)) {
                             $dob = \Carbon\Carbon::parse($member->member->birthday);
                             $m   = (int)$dob->format('n');
                             $d   = (int)$dob->format('j');
@@ -79,24 +93,9 @@
                             };
                         }
                     @endphp
-                    <select class="form-control aiz-selectpicker" name="sun_sign" data-live-search="true">
-                        <option value="">{{translate('Select Sun Sign')}}</option>
-                        <option value="aries" @if($user_sun_sign == 'aries') selected @endif>{{translate('Aries (Mar 21 – Apr 19)')}}</option>
-                        <option value="taurus" @if($user_sun_sign == 'taurus') selected @endif>{{translate('Taurus (Apr 20 – May 20)')}}</option>
-                        <option value="gemini" @if($user_sun_sign == 'gemini') selected @endif>{{translate('Gemini (May 21 – Jun 20)')}}</option>
-                        <option value="cancer" @if($user_sun_sign == 'cancer') selected @endif>{{translate('Cancer (Jun 21 – Jul 22)')}}</option>
-                        <option value="leo" @if($user_sun_sign == 'leo') selected @endif>{{translate('Leo (Jul 23 – Aug 22)')}}</option>
-                        <option value="virgo" @if($user_sun_sign == 'virgo') selected @endif>{{translate('Virgo (Aug 23 – Sep 22)')}}</option>
-                        <option value="libra" @if($user_sun_sign == 'libra') selected @endif>{{translate('Libra (Sep 23 – Oct 22)')}}</option>
-                        <option value="scorpio" @if($user_sun_sign == 'scorpio') selected @endif>{{translate('Scorpio (Oct 23 – Nov 21)')}}</option>
-                        <option value="sagittarius" @if($user_sun_sign == 'sagittarius') selected @endif>{{translate('Sagittarius (Nov 22 – Dec 21)')}}</option>
-                        <option value="capricorn" @if($user_sun_sign == 'capricorn') selected @endif>{{translate('Capricorn (Dec 22 – Jan 19)')}}</option>
-                        <option value="aquarius" @if($user_sun_sign == 'aquarius') selected @endif>{{translate('Aquarius (Jan 20 – Feb 18)')}}</option>
-                        <option value="pisces" @if($user_sun_sign == 'pisces') selected @endif>{{translate('Pisces (Feb 19 – Mar 20)')}}</option>
-                    </select>
-                    @error('sun_sign')
-                        <small class="form-text text-danger">{{ $message }}</small>
-                    @enderror
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                        <span>{{ $user_sun_sign ? translate($sun_sign_labels[$user_sun_sign]) : '—' }}</span><i class="las la-lock ml-2"></i>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label for="moon_sign">{{translate('Moon Sign (Rashi)')}}</label>
