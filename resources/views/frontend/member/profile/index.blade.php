@@ -291,6 +291,12 @@
       @include('frontend.member.profile.additional_attributes')
     @endif
 
+    @if (session('resent'))
+    <div class="alert alert-success mt-4" role="alert">
+        <i class="las la-check-circle mr-1"></i>{{ translate('A verification email has been sent to your email address.') }}
+    </div>
+    @endif
+
     @if(Auth::user()->email_verified_at == null)
     <div class="card mt-4" style="border: 2px solid #E8A800;">
         <div class="card-body d-flex align-items-center justify-content-between flex-wrap" style="gap:12px;">
