@@ -117,16 +117,55 @@
                 });
             </script>
 
+            @php
+                $heightParts = explode('.', $member->physical_attributes->height ?? '');
+                $heightFeet = $heightParts[0] ?? '';
+                $heightInches = $heightParts[1] ?? '';
+            @endphp
             <div class="form-group row">
                 <div class="col-md-6">
-                    <label>{{translate('Height')}} <small>({{ translate('In Feet') }})</small></label>
-                    <input type="text" name="height" value="{{ $member->physical_attributes->height ?? '' }}" class="form-control" placeholder="{{translate('e.g. 5.10, 5.6')}}">
+                    <label>{{translate('Height')}}</label>
+                    <input type="hidden" name="height" id="height_combined" value="{{ $member->physical_attributes->height ?? '' }}">
+                    <div class="row">
+                        <div class="col-6">
+                            <select class="form-control aiz-selectpicker" id="height_feet">
+                                <option value="">{{ translate('Feet') }}</option>
+                                @for ($ft = 3; $ft <= 8; $ft++)
+                                    <option value="{{ $ft }}" @if((string) $heightFeet === (string) $ft) selected @endif>{{ $ft }} {{ translate('ft') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-control aiz-selectpicker" id="height_inches">
+                                <option value="">{{ translate('Inches') }}</option>
+                                @for ($in = 0; $in <= 11; $in++)
+                                    <option value="{{ $in }}" @if((string) $heightInches === (string) $in) selected @endif>{{ $in }} {{ translate('in') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label>{{translate('Weight')}} <small>({{ translate('In Kg') }})</small></label>
                     <input type="number" name="weight" step="any" value="{{ $member->physical_attributes->weight ?? '' }}" class="form-control" placeholder="{{translate('Weight')}}">
                 </div>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var heightFeet = document.getElementById('height_feet');
+                    var heightInches = document.getElementById('height_inches');
+                    var heightCombined = document.getElementById('height_combined');
+
+                    function updateHeightCombined() {
+                        heightCombined.value = (heightFeet.value !== '' && heightInches.value !== '')
+                            ? heightFeet.value + '.' + heightInches.value
+                            : '';
+                    }
+
+                    $(heightFeet).on('changed.bs.select change', updateHeightCombined);
+                    $(heightInches).on('changed.bs.select change', updateHeightCombined);
+                });
+            </script>
 
             <div class="form-group row">
                 <div class="col-md-6">

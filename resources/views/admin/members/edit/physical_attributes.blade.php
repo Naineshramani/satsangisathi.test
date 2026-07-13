@@ -5,10 +5,33 @@
     <form action="{{ route('physical-attribute.update', $member->id) }}#physical_attributes" method="POST">
         <input name="_method" type="hidden" value="PATCH">
         @csrf
+        @php
+            $heightParts = explode('.', $member->physical_attributes->height ?? '');
+            $heightFeet = $heightParts[0] ?? '';
+            $heightInches = $heightParts[1] ?? '';
+        @endphp
         <div class="form-group row">
             <div class="col-md-6">
-                <label for="height">{{translate('Height')}}</label>
-                <input type="number" name="height" value="{{ $member->physical_attributes->height ?? "" }}" step="any" class="form-control" placeholder="{{translate('Height')}}" required>
+                <label for="height_feet">{{translate('Height')}}</label>
+                <input type="hidden" name="height" id="height_combined" value="{{ $member->physical_attributes->height ?? '' }}">
+                <div class="row">
+                    <div class="col-6">
+                        <select class="form-control" id="height_feet" required>
+                            <option value="">{{ translate('Feet') }}</option>
+                            @for ($ft = 3; $ft <= 8; $ft++)
+                                <option value="{{ $ft }}" @if((string) $heightFeet === (string) $ft) selected @endif>{{ $ft }} {{ translate('ft') }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control" id="height_inches" required>
+                            <option value="">{{ translate('Inches') }}</option>
+                            @for ($in = 0; $in <= 11; $in++)
+                                <option value="{{ $in }}" @if((string) $heightInches === (string) $in) selected @endif>{{ $in }} {{ translate('in') }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
                 @error('height')
                     <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
@@ -21,6 +44,22 @@
                 @enderror
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var heightFeet = document.getElementById('height_feet');
+                var heightInches = document.getElementById('height_inches');
+                var heightCombined = document.getElementById('height_combined');
+
+                function updateHeightCombined() {
+                    heightCombined.value = (heightFeet.value !== '' && heightInches.value !== '')
+                        ? heightFeet.value + '.' + heightInches.value
+                        : '';
+                }
+
+                heightFeet.addEventListener('change', updateHeightCombined);
+                heightInches.addEventListener('change', updateHeightCombined);
+            });
+        </script>
 
         <div class="form-group row">
             <div class="col-md-6">
