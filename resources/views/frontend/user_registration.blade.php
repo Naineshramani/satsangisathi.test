@@ -332,7 +332,7 @@
 
 					if (genderValue) {
 						$(select).val(genderValue).selectpicker('refresh');
-						$(select).trigger('change');
+						select.dispatchEvent(new Event('change', { bubbles: true }));
 					}
 				});
 			}
