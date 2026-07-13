@@ -123,7 +123,7 @@
                             @php $ext = strtolower(pathinfo(Auth::user()->biodata_file, PATHINFO_EXTENSION)); @endphp
                             <div class="mb-2 p-2 border rounded d-flex align-items-center" style="gap:10px;background:#fafafa;">
                                 @if (in_array($ext, ['jpg','jpeg','png']))
-                                    <img src="{{ asset(Auth::user()->biodata_file) }}" style="height:48px;width:48px;object-fit:cover;border-radius:4px;">
+                                    <img src="{{ static_asset(Auth::user()->biodata_file) }}" style="height:48px;width:48px;object-fit:cover;border-radius:4px;">
                                 @else
                                     <i class="las la-file-pdf text-danger" style="font-size:2rem;"></i>
                                 @endif
@@ -131,7 +131,7 @@
                                     <div class="text-truncate" style="font-size:0.82rem;">{{ basename(Auth::user()->biodata_file) }}</div>
                                     <small class="text-muted">{{ translate('Currently uploaded') }}</small>
                                 </div>
-                                <a href="{{ asset(Auth::user()->biodata_file) }}" target="_blank" class="btn btn-xs btn-outline-secondary" style="white-space:nowrap;">
+                                <a href="{{ static_asset(Auth::user()->biodata_file) }}" target="_blank" class="btn btn-xs btn-outline-secondary" style="white-space:nowrap;">
                                     <i class="las la-external-link-alt"></i>
                                 </a>
                             </div>
@@ -154,7 +154,7 @@
                             @php $idExt = strtolower(pathinfo(Auth::user()->id_proof_file, PATHINFO_EXTENSION)); @endphp
                             <div class="mb-2 p-2 border rounded d-flex align-items-center" style="gap:10px;background:#fafafa;">
                                 @if (in_array($idExt, ['jpg','jpeg','png']))
-                                    <img src="{{ asset(Auth::user()->id_proof_file) }}" style="height:48px;width:48px;object-fit:cover;border-radius:4px;">
+                                    <img src="{{ static_asset(Auth::user()->id_proof_file) }}" style="height:48px;width:48px;object-fit:cover;border-radius:4px;">
                                 @else
                                     <i class="las la-id-card text-primary" style="font-size:2rem;"></i>
                                 @endif
@@ -162,7 +162,7 @@
                                     <div class="text-truncate" style="font-size:0.82rem;">{{ basename(Auth::user()->id_proof_file) }}</div>
                                     <small class="text-muted">{{ translate('Currently uploaded') }}</small>
                                 </div>
-                                <a href="{{ asset(Auth::user()->id_proof_file) }}" target="_blank" class="btn btn-xs btn-outline-secondary" style="white-space:nowrap;">
+                                <a href="{{ static_asset(Auth::user()->id_proof_file) }}" target="_blank" class="btn btn-xs btn-outline-secondary" style="white-space:nowrap;">
                                     <i class="las la-external-link-alt"></i>
                                 </a>
                             </div>

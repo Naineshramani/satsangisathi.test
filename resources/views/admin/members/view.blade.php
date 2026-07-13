@@ -740,12 +740,12 @@
                             @if ($member->biodata_file)
                                 @php $biodataExt = strtolower(pathinfo($member->biodata_file, PATHINFO_EXTENSION)); @endphp
                                 @if (in_array($biodataExt, ['jpg','jpeg','png']))
-                                    <img src="{{ asset($member->biodata_file) }}" class="img-fluid rounded border d-block mb-2" style="max-height:180px;cursor:default;">
+                                    <img src="{{ static_asset($member->biodata_file) }}" class="img-fluid rounded border d-block mb-2" style="max-height:180px;cursor:default;">
                                 @endif
                                 <a href="{{ route('admin.member.doc.download', ['path' => base64_encode($member->biodata_file)]) }}" class="btn btn-sm btn-outline-primary mr-1">
                                     <i class="las la-download mr-1"></i>{{ translate('Download') }}
                                 </a>
-                                <a href="{{ asset($member->biodata_file) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                <a href="{{ static_asset($member->biodata_file) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
                                     <i class="las la-external-link-alt mr-1"></i>{{ translate('Open') }}
                                 </a>
                             @else
@@ -757,12 +757,12 @@
                             @if ($member->id_proof_file)
                                 @php $idExt = strtolower(pathinfo($member->id_proof_file, PATHINFO_EXTENSION)); @endphp
                                 @if (in_array($idExt, ['jpg','jpeg','png']))
-                                    <img src="{{ asset($member->id_proof_file) }}" class="img-fluid rounded border d-block mb-2" style="max-height:180px;cursor:default;">
+                                    <img src="{{ static_asset($member->id_proof_file) }}" class="img-fluid rounded border d-block mb-2" style="max-height:180px;cursor:default;">
                                 @endif
                                 <a href="{{ route('admin.member.doc.download', ['path' => base64_encode($member->id_proof_file)]) }}" class="btn btn-sm btn-outline-primary mr-1">
                                     <i class="las la-download mr-1"></i>{{ translate('Download') }}
                                 </a>
-                                <a href="{{ asset($member->id_proof_file) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                <a href="{{ static_asset($member->id_proof_file) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
                                     <i class="las la-external-link-alt mr-1"></i>{{ translate('Open') }}
                                 </a>
                             @else
