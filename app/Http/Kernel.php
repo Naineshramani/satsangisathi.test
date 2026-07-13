@@ -79,6 +79,7 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'app_language' => AppLanguage::class,
         'activated' => \App\Http\Middleware\CheckActiveUser::class,
+        'approved' => \App\Http\Middleware\CheckApprovedMember::class,
         'check.package' => \App\Http\Middleware\CheckMemberPackage::class,
     ];
 

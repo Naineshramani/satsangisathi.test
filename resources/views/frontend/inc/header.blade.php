@@ -158,7 +158,7 @@
         </div>
 
         @if (Auth::check() && auth()->user()->user_type == 'member')
-            @php $hdrVerified = Auth::user()->email_verified_at != null; @endphp
+            @php $hdrApproved = Auth::user()->approved == 1; @endphp
             <div class="border-top d-none d-lg-block">
                 <div class="container">
                     <ul class="list-inline d-flex align-items-center mb-0">
@@ -175,43 +175,43 @@
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ $hdrVerified ? route('my_interests.index') : 'javascript:void(0)' }}"
-                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['my_interests.index','express-interest.index'],'text-primary-grad opacity-100') : 'opacity-40' }}"
-                                @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
+                            <a href="{{ $hdrApproved ? route('my_interests.index') : 'javascript:void(0)' }}"
+                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrApproved ? areActiveRoutes(['my_interests.index','express-interest.index'],'text-primary-grad opacity-100') : 'opacity-40' }}"
+                                @if(!$hdrApproved) title="{{ translate('Your account is pending admin approval') }}" @endif>
                                 <span>{{ translate('Interest Sent') }}</span>
-                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
+                                @if(!$hdrApproved)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ $hdrVerified ? route('interest_requests') : 'javascript:void(0)' }}"
-                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['interest_requests'],'text-primary-grad opacity-100') : 'opacity-40' }}"
-                                @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
+                            <a href="{{ $hdrApproved ? route('interest_requests') : 'javascript:void(0)' }}"
+                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrApproved ? areActiveRoutes(['interest_requests'],'text-primary-grad opacity-100') : 'opacity-40' }}"
+                                @if(!$hdrApproved) title="{{ translate('Your account is pending admin approval') }}" @endif>
                                 <span>{{ translate('Interest Received') }}</span>
-                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
+                                @if(!$hdrApproved)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ $hdrVerified ? route('my_shortlists') : 'javascript:void(0)' }}"
-                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['my_shortlists'],'text-primary-grad opacity-100') : 'opacity-40' }}"
-                                @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
+                            <a href="{{ $hdrApproved ? route('my_shortlists') : 'javascript:void(0)' }}"
+                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrApproved ? areActiveRoutes(['my_shortlists'],'text-primary-grad opacity-100') : 'opacity-40' }}"
+                                @if(!$hdrApproved) title="{{ translate('Your account is pending admin approval') }}" @endif>
                                 <span>{{ translate('Shortlist') }}</span>
-                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
+                                @if(!$hdrApproved)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ $hdrVerified ? route('all.messages') : 'javascript:void(0)' }}"
-                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['all.messages'],'text-primary-grad opacity-100') : 'opacity-40' }}"
-                                @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
+                            <a href="{{ $hdrApproved ? route('all.messages') : 'javascript:void(0)' }}"
+                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrApproved ? areActiveRoutes(['all.messages'],'text-primary-grad opacity-100') : 'opacity-40' }}"
+                                @if(!$hdrApproved) title="{{ translate('Your account is pending admin approval') }}" @endif>
                                 <span>{{ translate('Messaging') }}</span>
-                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
+                                @if(!$hdrApproved)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ $hdrVerified ? route('profile-viewers.index') : 'javascript:void(0)' }}"
-                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrVerified ? areActiveRoutes(['profile-viewers.index'],'text-primary-grad opacity-100') : 'opacity-40' }}"
-                                @if(!$hdrVerified) title="{{ translate('Please verify your account first') }}" @endif>
+                            <a href="{{ $hdrApproved ? route('profile-viewers.index') : 'javascript:void(0)' }}"
+                                class="text-reset d-inline-block px-3 py-2 fw-600 {{ $hdrApproved ? areActiveRoutes(['profile-viewers.index'],'text-primary-grad opacity-100') : 'opacity-40' }}"
+                                @if(!$hdrApproved) title="{{ translate('Your account is pending admin approval') }}" @endif>
                                 <span>{{ translate('Profile Viewers') }}</span>
-                                @if(!$hdrVerified)<i class="las la-lock ml-1"></i>@endif
+                                @if(!$hdrApproved)<i class="las la-lock ml-1"></i>@endif
                             </a>
                         </li>
                     </ul>

@@ -297,7 +297,7 @@
     </div>
     @endif
 
-    @if(Auth::user()->email_verified_at == null)
+    @if(get_setting('email_verification') == 1 && Auth::user()->email_verified_at == null)
     <div class="card mt-4" style="border: 2px solid #E8A800;">
         <div class="card-body d-flex align-items-center justify-content-between flex-wrap" style="gap:12px;">
             <div>
@@ -309,6 +309,17 @@
             <a href="{{ route('verification.resend') }}" class="btn btn-primary fw-600">
                 <i class="las la-envelope mr-1"></i>{{ translate('Verify Now') }}
             </a>
+        </div>
+    </div>
+    @endif
+
+    @if(Auth::user()->approved == 0)
+    <div class="card mt-4" style="border: 2px solid #E8A800;">
+        <div class="card-body">
+            <h5 class="mb-1 fw-700" style="color:#E8A800;">
+                <i class="las la-exclamation-circle mr-1"></i>{{ translate('Account Pending Approval') }}
+            </h5>
+            <p class="mb-0 opacity-70">{{ translate('Your account is awaiting admin approval. Messaging, interests, shortlists, and profile viewers will be available once approved.') }}</p>
         </div>
     </div>
     @endif

@@ -179,29 +179,34 @@ Route::group(['middleware' => ['member', 'verified', 'check.package']], function
         Route::post('/gallery_image/store', [GalleryImageController::class, 'store'])->name('gallery-image_store');
         Route::get('/gallery_image/destroy/{id}', [GalleryImageController::class, 'destroy'])->name('gallery_image.destroy');
 
-        // Express Interest
-        Route::resource('/express-interest', ExpressInterestController::class);
-        Route::controller(ExpressInterestController::class)->group(function () {
-            Route::get('/my-interests', 'index')->name('my_interests.index');
-            Route::get('/interest/requests', 'interest_requests')->name('interest_requests');
-            Route::post('/interest/accept', 'accept_interest')->name('accept_interest');
-            Route::post('/interest/reject', 'reject_interest')->name('reject_interest');
-        });
+        // Features gated behind admin approval (Interest, Messaging, Shortlist, Profile Viewers)
+        Route::middleware('approved')->group(function () {
+            // Express Interest
+            Route::resource('/express-interest', ExpressInterestController::class);
+            Route::controller(ExpressInterestController::class)->group(function () {
+                Route::get('/my-interests', 'index')->name('my_interests.index');
+                Route::get('/interest/requests', 'interest_requests')->name('interest_requests');
+                Route::post('/interest/accept', 'accept_interest')->name('accept_interest');
+                Route::post('/interest/reject', 'reject_interest')->name('reject_interest');
+            });
 
-        // Chat
-        Route::controller(ChatController::class)->group(function () {
-            Route::get('/chat', 'index')->name('all.messages');
-            Route::get('/single-chat/{id}', 'chat_view')->name('chat_view');
-            Route::post('/chat-reply', 'chat_reply')->name('chat.reply');
-            Route::get('/chat/refresh/{id}', 'chat_refresh')->name('chat_refresh');
-            Route::post('/chat/old-messages', 'get_old_messages')->name('get-old-message');
-        });
+            // Chat
+            Route::controller(ChatController::class)->group(function () {
+                Route::get('/chat', 'index')->name('all.messages');
+                Route::get('/single-chat/{id}', 'chat_view')->name('chat_view');
+                Route::post('/chat-reply', 'chat_reply')->name('chat.reply');
+                Route::get('/chat/refresh/{id}', 'chat_refresh')->name('chat_refresh');
+                Route::post('/chat/old-messages', 'get_old_messages')->name('get-old-message');
+            });
 
-        // ShortList list, Add, Remove
-        Route::controller(ShortlistController::class)->group(function () {
-            Route::get('/my-shortlists', 'index')->name('my_shortlists');
-            Route::post('/member/add-to-shortlist', 'create')->name('member.add_to_shortlist');
-            Route::post('/member/remove-from-shortlist', 'remove')->name('member.remove_from_shortlist');
+            // ShortList list, Add, Remove
+            Route::controller(ShortlistController::class)->group(function () {
+                Route::get('/my-shortlists', 'index')->name('my_shortlists');
+                Route::post('/member/add-to-shortlist', 'create')->name('member.add_to_shortlist');
+                Route::post('/member/remove-from-shortlist', 'remove')->name('member.remove_from_shortlist');
+            });
+
+            Route::resource('profile-viewers', ProfileViewerController::class);
         });
 
         // Ignore list, Add, Remove
@@ -244,7 +249,6 @@ Route::group(['middleware' => ['member', 'verified', 'check.package']], function
             Route::post('/happy-story/store', 'store')->name('happy_story.store');
         });
 
-        Route::resource('profile-viewers', ProfileViewerController::class);
         Route::get('/matched-profiles', [ProfileMatchController::class, 'myMatchedProfiles'])->name('my_matched_profiles');
         Route::get('/horoscope-matched-profiles', [HoroscopeProfileMatchController::class, 'horoscopeMatchedProfiles'])->name('horoscope_matched_profiles');
         Route::get('/matched-refresh', [ProfileMatchController::class, 'matchedRefresh'])->name('match.refresh');
