@@ -20,7 +20,7 @@
 									<div class="col-lg-12">
 										<div class="form-group mb-3">
 											<label class="form-label" for="on_behalf">{{ translate('On Behalf') }}</label>
-											<select class="form-control aiz-selectpicker @error('on_behalf') is-invalid @enderror" name="on_behalf" required>
+											<select id="on_behalf" class="form-control aiz-selectpicker @error('on_behalf') is-invalid @enderror" name="on_behalf" required>
 												@foreach ($on_behalves as $on_behalf)
 													<option value="{{ $on_behalf->id }}">{{ $on_behalf->name }}</option>
 												@endforeach
@@ -314,6 +314,28 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const select = document.getElementById('gender');
+			const onBehalfSelect = document.getElementById('on_behalf');
+
+			if (onBehalfSelect) {
+				const maleOnBehalf = ['son', 'brother'];
+				const femaleOnBehalf = ['daughter', 'sister'];
+
+				onBehalfSelect.addEventListener('change', function() {
+					const label = this.options[this.selectedIndex].text.trim().toLowerCase();
+					let genderValue = null;
+
+					if (maleOnBehalf.includes(label)) {
+						genderValue = '1';
+					} else if (femaleOnBehalf.includes(label)) {
+						genderValue = '2';
+					}
+
+					if (genderValue) {
+						$(select).val(genderValue).selectpicker('refresh');
+						$(select).trigger('change');
+					}
+				});
+			}
 			const dobInput = document.getElementById("date_of_birth"); 
 
 			function initDatepicker(maxDate) {
