@@ -180,11 +180,13 @@
                 document.getElementById('email').value = oldLogin;
                 toggleEmailPhone(document.querySelector('button[onclick^="toggleEmailPhone"]'));
             } else {
-                // Restore the full number via the widget's own API so the
-                // country + local-number split stays consistent, instead of
-                // writing the combined international string into the raw
-                // input (which broke iti.getNumber() on the next submit).
+                // Restore via the widget's own API so the correct country
+                // gets selected, then strip the space it inserts for
+                // display formatting -- that space fails the input's
+                // native validity check and silently blocks re-submission
+                // entirely (browser can't focus the control to report it).
                 iti.setNumber(oldLogin);
+                input.value = input.value.replace(/[^\d]/g, '');
             }
         })();
     </script>
