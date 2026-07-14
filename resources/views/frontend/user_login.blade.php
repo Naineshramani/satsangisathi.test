@@ -179,15 +179,13 @@
             if (looksLikeEmail) {
                 document.getElementById('email').value = oldLogin;
                 toggleEmailPhone(document.querySelector('button[onclick^="toggleEmailPhone"]'));
-            } else {
-                // Restore via the widget's own API so the correct country
-                // gets selected, then strip the space it inserts for
-                // display formatting -- that space fails the input's
-                // native validity check and silently blocks re-submission
-                // entirely (browser can't focus the control to report it).
-                iti.setNumber(oldLogin);
-                input.value = input.value.replace(/[^\d]/g, '');
             }
+            // Intentionally not restoring the phone number: the intl-tel-input
+            // widget re-applies its own display formatting (a space) some time
+            // after iti.setNumber() runs (likely once its utils script loads),
+            // which fails the input's native validity check and silently blocks
+            // re-submission with no visible error. Leaving it blank for the
+            // user to retype is a small inconvenience but reliably correct.
         })();
     </script>
 @endsection
