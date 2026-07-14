@@ -30,7 +30,7 @@
                                     <div class="form-group phone-form-group mb-1">
                                         <input type="tel" id="phone-code"
                                             class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                            value="{{ old('email') }}" placeholder="{{ translate('Mobile Number') }}"
+                                            placeholder="{{ translate('Mobile Number') }}"
                                             autocomplete="off">
                                         @if ($errors->has('email'))
                                             <span class="invalid-feedback" role="alert">
