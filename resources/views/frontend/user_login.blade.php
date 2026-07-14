@@ -164,4 +164,23 @@
         });
     </script>
     @include('partials.emailOrPhone')
+    <script>
+        (function () {
+            var oldLogin = @json(old('email'));
+            if (!oldLogin) {
+                return;
+            }
+            var looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(oldLogin);
+            if (looksLikeEmail) {
+                document.getElementById('email').value = oldLogin;
+                toggleEmailPhone(document.querySelector('button[onclick^="toggleEmailPhone"]'));
+            } else {
+                // Restore the full number via the widget's own API so the
+                // country + local-number split stays consistent, instead of
+                // writing the combined international string into the raw
+                // input (which broke iti.getNumber() on the next submit).
+                iti.setNumber(oldLogin);
+            }
+        })();
+    </script>
 @endsection
