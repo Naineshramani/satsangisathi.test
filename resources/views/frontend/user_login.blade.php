@@ -158,6 +158,11 @@
             } else {
                 event.preventDefault();
                 let fullNumber = iti.getNumber();
+                // Strip any formatting characters (spaces, dashes, etc.)
+                // that country-aware display formatting can introduce, so
+                // the submitted value always matches the plain +<digits>
+                // format stored in the database.
+                fullNumber = fullNumber.replace(/[^+\d]/g, '');
                 $("#finalInput").val(fullNumber);
                 this.submit();
             }
