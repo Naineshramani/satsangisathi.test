@@ -43,7 +43,7 @@
                                     <div class="form-group email-form-group mb-1 d-none">
                                         <input type="email" id="email"
                                             class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                            value="{{ old('email') }}" placeholder="{{ translate('Email') }}"
+                                            placeholder="{{ translate('Email') }}"
                                             autocomplete="off">
                                         @if ($errors->has('email'))
                                             <span class="invalid-feedback" role="alert">
