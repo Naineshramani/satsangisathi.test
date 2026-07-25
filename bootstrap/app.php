@@ -68,6 +68,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'app_language' =>  \App\Http\Middleware\AppLanguage::class,
             'activated' => \App\Http\Middleware\CheckActiveUser::class,
+            'approved' => \App\Http\Middleware\CheckApprovedMember::class,
             'check.package' => \App\Http\Middleware\CheckMemberPackage::class,
         ]);
 
