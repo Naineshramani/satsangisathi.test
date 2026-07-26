@@ -31,7 +31,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
   });
 });
 
-Route::group(['middleware' => ['member','verified']], function(){
+Route::group(['middleware' => ['member']], function(){
   Route::controller(ReferralSystemController::class)->group(function () {
     Route::get('/referred-users', 'my_referred_users')->name('my_referred_users');
     Route::get('/my-referral-earnings', 'my_referral_earnings')->name('my_referral_earnings');

@@ -131,7 +131,7 @@ Route::controller(BlogController::class)->group(function () {
 // Dashboard and profile accessible without package/approval checks
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 
-Route::group(['middleware' => ['verified']], function () {
+Route::group(['middleware' => ['auth']], function () {
     Route::controller(MemberController::class)->group(function () {
         Route::get('/member/verification', 'verification_form')->name('member.verification');
         Route::post('/member/verification-info/store', 'verification_info_store')->name('member.verification_info.store');
@@ -150,7 +150,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['middleware' => ['member', 'verified', 'check.package']], function () {
+Route::group(['middleware' => ['member', 'check.package']], function () {
     Route::controller(HomeController::class)->middleware('activated')->group(function () {
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
