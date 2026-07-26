@@ -357,14 +357,16 @@
                                         <input type="hidden" name='manual_payment_id' class="manual_payment_id">
                                         <div class="form-group row">
                                             <div class="col-md-6">
-                                                <label>{{ translate('Transaction Id') }}<span class="text-danger">
-                                                        *</span></label>
+                                                <label>{{ translate('Transaction Id') }}
+                                                    <small class="opacity-60">({{ translate('optional') }})</small>
+                                                </label>
                                                 <input type="text" name="transaction_id" id="transaction_id"
                                                     class="form-control" placeholder="{{ translate('Transaction Id') }}">
                                             </div>
                                             <div class="col-md-6">
-                                                <label>{{ translate('Payment Proof') }}<span class="text-danger">
-                                                        *</span></label>
+                                                <label>{{ translate('Payment Proof') }}
+                                                    <small class="opacity-60">({{ translate('optional') }})</small>
+                                                </label>
                                                 <div class="input-group" data-toggle="aizuploader" data-type="image">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text bg-soft-secondary font-weight-medium">
@@ -443,19 +445,7 @@
 
         function package_purchase(el) {
             $(el).prop('disabled', true);
-            var payment_type = $("#payment_type").val();
-            if (payment_type == 'manual_payment' || payment_type == 'upi_payment') {
-                var transaction_id = $("#transaction_id").val();
-                var payment_proof = $("#payment_proof").val();
-                if (transaction_id == '' || payment_proof == '') {
-                    AIZ.plugins.notify('danger', '{{ translate('Please Provide transaction id and payemnt proof.') }}');
-                    $(el).prop('disabled', false);
-                } else {
-                    $('#package-payment-form').submit();
-                }
-            } else {
-                $('#package-payment-form').submit();
-            }
+            $('#package-payment-form').submit();
         }
         // manual payment
         function toggleManualPaymentData(id) {
