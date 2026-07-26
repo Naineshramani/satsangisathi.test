@@ -106,7 +106,7 @@ class PackagePaymentController extends Controller
                 $user->save();
                 return $this->package_payment_done($request->session()->get('payment_data'), null);
             }
-        } elseif ($request->payment_option == 'manual_payment') {
+        } elseif ($request->payment_option == 'manual_payment' || $request->payment_option == 'upi_payment') {
             $package_payment = new PackagePayment();
             $package_payment->payment_code = date('ymd-His');
             $package_payment->user_id = $user->id;
@@ -116,7 +116,9 @@ class PackagePaymentController extends Controller
             $package_payment->amount = $request->amount;
             $package_payment->payment_details = '';
             $package_payment->offline_payment = 1;
-            $package_payment->custom_payment_name = ManualPaymentMethod::find($request->manual_payment_id)->heading;
+            $package_payment->custom_payment_name = $request->payment_option == 'upi_payment'
+                ? 'UPI Payment'
+                : ManualPaymentMethod::find($request->manual_payment_id)->heading;
             $package_payment->custom_payment_transaction_id = $request->transaction_id;
             $package_payment->custom_payment_proof = $request->payment_proof;
             $package_payment->custom_payment_details = $request->payment_details;

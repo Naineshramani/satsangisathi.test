@@ -275,6 +275,22 @@
                                                 </div>
                                             @endif
 
+                                            @if (get_setting('upi_payment_activation') == 1)
+                                                <div class="col-6 col-md-4">
+                                                    <label class="aiz-megabox d-block mb-3">
+                                                        <input value="upi_payment" type="radio" name="payment_option"
+                                                            onchange="selectUpiPayment()">
+                                                        <span class="d-block p-3 aiz-megabox-elem text-center">
+                                                            <i class="las la-qrcode" style="font-size: 40px;"></i>
+                                                            <span class="d-block text-center">
+                                                                <span
+                                                                    class="d-block fw-600 fs-15">{{ translate('UPI') }}</span>
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            @endif
+
                                             @foreach ($manual_payments as $method)
                                                 <div class="col-6 col-md-4">
                                                     <label class="aiz-megabox d-block mb-3">
@@ -298,6 +314,12 @@
                                         </div>
                                     </div>
                                     {{--  --}}
+                                    <div id="upi_payment_info" class="d-none">
+                                        <p>{{ translate('Scan the QR code below with any UPI app and pay the exact amount shown.') }}</p>
+                                        <div id="upi_qr_code" class="mb-2"></div>
+                                        <p class="fs-13 opacity-70">{{ translate('UPI ID') }}: {{ env('UPI_ID') }}</p>
+                                    </div>
+
                                     @foreach ($manual_payments as $method)
                                         <div id="manual_payment_info_{{ $method->id }}" class="d-none col-6 col-md-4">
 
@@ -381,6 +403,7 @@
 @endsection
 
 @section('script')
+    <script src="{{ static_asset('assets/js/qrcode.min.js') }}"></script>
     <script type="text/javascript">
         // $(document).ready(function() {
         $(".online_payment").click(function() {
@@ -395,10 +418,33 @@
             $('.manual_payment_description').removeClass('d-none');
         });
 
+        function selectUpiPayment() {
+            $(".purchase_button").prop('disabled', false);
+            $("#payment_type").val('upi_payment');
+            $('.manual_payment_id').val('');
+            $('#manual_payment_description').parent().removeClass('d-none');
+            $('#manual_payment_description').html($('#upi_payment_info').html());
+            $('#purchase_by_manual_payment').removeClass('d-none');
+
+            var upiId = @json(env('UPI_ID'));
+            var payeeName = @json(env('UPI_PAYEE_NAME')) || 'Payment';
+            var amount = {{ (float) $package_price }};
+            var upiUrl = 'upi://pay?pa=' + encodeURIComponent(upiId) + '&pn=' + encodeURIComponent(payeeName) +
+                '&am=' + amount + '&cu=INR';
+            var qrContainer = document.querySelector('#manual_payment_description #upi_qr_code');
+            if (qrContainer) {
+                new QRCode(qrContainer, {
+                    text: upiUrl,
+                    width: 200,
+                    height: 200
+                });
+            }
+        }
+
         function package_purchase(el) {
             $(el).prop('disabled', true);
             var payment_type = $("#payment_type").val();
-            if (payment_type == 'manual_payment') {
+            if (payment_type == 'manual_payment' || payment_type == 'upi_payment') {
                 var transaction_id = $("#transaction_id").val();
                 var payment_proof = $("#payment_proof").val();
                 if (transaction_id == '' || payment_proof == '') {
