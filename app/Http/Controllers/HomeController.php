@@ -395,6 +395,13 @@ class HomeController extends Controller
 
         $user = User::findOrFail($id);
 
+        // Trial users may only open a full profile of a candidate who has
+        // already sent them an interest (package holders are unrestricted).
+        if ($authUser->id != $user->id && $authUser->onTrial() && !$authUser->hasReceivedInterestFrom($user->id)) {
+            flash(translate("You can view this member's full profile once they have expressed interest in you."))->warning();
+            return redirect()->route('member.listing');
+        }
+
         // Profile view data store
         if($user->id != $authUser->id){
             $profileViewed = ProfileViewer::where('user_id', $user->id)->where('viewed_by', $authUser->id)->first();

@@ -105,9 +105,16 @@
                                                         </td>
                                                     </tr>
                                                 </table>
+                                                @php
+                                                    $received_expressed_interest = \App\Models\ExpressInterest::where('user_id', Auth::user()->id)
+                                                        ->where('interested_by', $user->id)
+                                                        ->first();
+                                                @endphp
                                                 <div class="row gutters-5 text-center">
                                                     <div class="col">
                                                         <a @if (get_setting('full_profile_show_according_to_membership') == 1 && Auth::user()->membership == 1) href="javascript:void(0);" onclick="package_update_alert()"
+                                                    @elseif(Auth::user()->onTrial() && empty($received_expressed_interest))
+                                                        href="javascript:void(0);" onclick="trial_profile_locked_alert()"
                                                     @else
                                                         href="{{ route('member_profile', $user->id) }}" @endif
                                                             class="text-reset c-pointer">
@@ -121,9 +128,6 @@
                                                             $interest_class = 'text-primary';
                                                             $do_expressed_interest = \App\Models\ExpressInterest::where('user_id', $user->id)
                                                                 ->where('interested_by', Auth::user()->id)
-                                                                ->first();
-                                                            $received_expressed_interest = \App\Models\ExpressInterest::where('user_id', Auth::user()->id)
-                                                                ->where('interested_by', $user->id)
                                                                 ->first();
                                                             if (empty($do_expressed_interest) && empty($received_expressed_interest)) {
                                                                 $interest_onclick = 1;
@@ -233,6 +237,7 @@
 
 @section('modal')
     @include('modals.package_update_alert_modal')
+    @include('modals.trial_profile_locked_modal')
     @include('modals.confirm_modal')
 
     <!-- Ignore Modal -->
@@ -425,6 +430,10 @@
         // Full Profile view
         function package_update_alert() {
             $('.package_update_alert_modal').modal('show');
+        }
+
+        function trial_profile_locked_alert() {
+            $('.trial_profile_locked_modal').modal('show');
         }
 
         // Express Interest

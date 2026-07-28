@@ -104,6 +104,7 @@ class LoginController extends Controller
                 $newUser->code               = unique_code();
                 $newUser->membership         = 1;
                 $newUser->approved           = get_setting('member_verification') == 1 ? 0 : 1;
+                $newUser->approved_at        = $newUser->approved == 1 ? now() : null;
                 $newUser->save();
 
                 $member                             = new Member;

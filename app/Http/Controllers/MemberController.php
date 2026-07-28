@@ -600,6 +600,7 @@ class MemberController extends Controller
     {
         $user             = User::findOrFail($id);
         $user->approved   = 1;
+        $user->approved_at = now();
         if ($user->save()) {
 
             $status = 'Approved';

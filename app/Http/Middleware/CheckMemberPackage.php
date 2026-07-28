@@ -9,6 +9,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckMemberPackage
 {
+    protected function exemptRouteNames(): array
+    {
+        return [
+            'home', 'packages', 'package_payment_methods', 'free_package_purchase',
+            'package_payment.invoice', 'package_purchase_history', 'package.payment',
+            'profile_settings', 'dashboard', 'user.logout',
+            'member.introduction.update', 'member.basic_info.update',
+            'member.contact_info.update', 'member.partner_preference.update',
+            'member.physical_attribute.update', 'member.religious_info.update',
+            'member.professional_info.update', 'member.family_info.update',
+            'member.horoscope_info.update', 'member.present_address.update',
+            'member.permanent_address.update', 'member.change_password',
+            'member.account_deactivation', 'member.account_delete',
+            'user.change.email', 'verification.resend',
+            'gallery-image_index', 'gallery-image.store', 'gallery-image.destroy',
+        ];
+    }
+
+    protected function isBlocked($user): bool
+    {
+        return $user && $user->member && is_null($user->member->current_package_id);
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -18,22 +41,8 @@ class CheckMemberPackage
     {
         $user = Auth::user();
 
-        if ($user && $user->member && is_null($user->member->current_package_id)) {
-
-            if (!$request->routeIs([
-                'home', 'packages', 'package_payment_methods', 'free_package_purchase',
-                'package_payment.invoice', 'package_purchase_history', 'package.payment',
-                'profile_settings', 'dashboard', 'user.logout',
-                'member.introduction.update', 'member.basic_info.update',
-                'member.contact_info.update', 'member.partner_preference.update',
-                'member.physical_attribute.update', 'member.religious_info.update',
-                'member.professional_info.update', 'member.family_info.update',
-                'member.horoscope_info.update', 'member.present_address.update',
-                'member.permanent_address.update', 'member.change_password',
-                'member.account_deactivation', 'member.account_delete',
-                'user.change.email', 'verification.resend',
-                'gallery-image_index', 'gallery-image.store', 'gallery-image.destroy',
-            ])) {
+        if ($this->isBlocked($user)) {
+            if (!$request->routeIs($this->exemptRouteNames())) {
                 flash(translate('Please purchase a package first.'))->warning();
                 return redirect()->route('packages');
             }

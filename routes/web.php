@@ -150,13 +150,21 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['middleware' => ['member', 'check.package']], function () {
-    Route::controller(HomeController::class)->middleware('activated')->group(function () {
-        Route::post('/new-user-email', 'update_email')->name('user.change.email');
-        Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
-
+Route::group(['middleware' => ['member']], function () {
+    // Trial-eligible: reachable with an active package OR during the
+    // post-approval trial window (see User::onTrial()).
+    Route::controller(HomeController::class)->middleware(['activated', 'package_or_trial'])->group(function () {
         Route::any('/member-listing', 'member_listing')->name('member.listing');
         Route::get('/member-profile/{id}', 'view_member_profile')->name('member_profile');
+    });
+
+    Route::middleware(['activated', 'package_or_trial', 'approved'])->group(function () {
+        Route::get('/interest/requests', [ExpressInterestController::class, 'interest_requests'])->name('interest_requests');
+    });
+
+    Route::controller(HomeController::class)->middleware(['activated', 'check.package'])->group(function () {
+        Route::post('/new-user-email', 'update_email')->name('user.change.email');
+        Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
 
         Route::post('/user/remaining_package_value', 'user_remaining_package_value')->name('user.remaining_package_value');
     });
@@ -164,7 +172,7 @@ Route::group(['middleware' => ['member', 'check.package']], function () {
     Route::controller(MemberController::class)->group(function () {
     });
 
-    Route::middleware('activated')->group(function () {
+    Route::middleware(['activated', 'check.package'])->group(function () {
         Route::get('/package-payment-methods/{id}', [PackageController::class, 'package_payemnt_methods'])->name('package_payment_methods');
         Route::controller(PackagePaymentController::class)->group(function () {
             Route::post('/package-payment', 'store')->name('package.payment');
@@ -185,7 +193,6 @@ Route::group(['middleware' => ['member', 'check.package']], function () {
             Route::resource('/express-interest', ExpressInterestController::class);
             Route::controller(ExpressInterestController::class)->group(function () {
                 Route::get('/my-interests', 'index')->name('my_interests.index');
-                Route::get('/interest/requests', 'interest_requests')->name('interest_requests');
                 Route::post('/interest/accept', 'accept_interest')->name('accept_interest');
                 Route::post('/interest/reject', 'reject_interest')->name('reject_interest');
             });

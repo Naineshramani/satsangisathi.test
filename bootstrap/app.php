@@ -70,6 +70,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'activated' => \App\Http\Middleware\CheckActiveUser::class,
             'approved' => \App\Http\Middleware\CheckApprovedMember::class,
             'check.package' => \App\Http\Middleware\CheckMemberPackage::class,
+            'package_or_trial' => \App\Http\Middleware\CheckPackageOrTrial::class,
         ]);
 
         $middleware->priority([

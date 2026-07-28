@@ -42,6 +42,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use HasRoles;
 
+    const TRIAL_DAYS = 7;
+
     public function sendEmailVerificationNotification()
     {
         $this->notify(new EmailVerificationNotification());
@@ -82,7 +84,35 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'approved_at' => 'datetime',
     ];
+
+    /**
+     * True while the member is inside their post-approval trial window
+     * (approved, no active package, still within TRIAL_DAYS of approval).
+     */
+    public function onTrial(): bool
+    {
+        if ($this->approved != 1 || $this->approved_at === null) {
+            return false;
+        }
+
+        if ($this->member && !is_null($this->member->current_package_id)) {
+            return false;
+        }
+
+        return $this->approved_at->copy()->addDays(self::TRIAL_DAYS)->isFuture();
+    }
+
+    /**
+     * True if $candidateId has sent an interest to this user.
+     */
+    public function hasReceivedInterestFrom(int $candidateId): bool
+    {
+        return \App\Models\ExpressInterest::where('user_id', $this->id)
+            ->where('interested_by', $candidateId)
+            ->exists();
+    }
 
     public function member()
     {

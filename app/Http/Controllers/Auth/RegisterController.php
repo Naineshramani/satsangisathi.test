@@ -127,6 +127,7 @@ class RegisterController extends Controller
                 'password'    => Hash::make($data['password']),
                 'code'        => unique_code(),
                 'approved'    => $approval,
+                'approved_at' => $approval == 1 ? now() : null,
             ]);
         } else {
             if (addon_activation('otp_system')) {
@@ -139,6 +140,7 @@ class RegisterController extends Controller
                     'password'    => Hash::make($data['password']),
                     'code'        => unique_code(),
                     'approved'    => $approval,
+                    'approved_at' => $approval == 1 ? now() : null,
                     'verification_code' => rand(100000, 999999)
                 ]);
             }
