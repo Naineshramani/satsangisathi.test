@@ -234,11 +234,19 @@
                 <td class="label2">{{ translate('Years') }}</td>
             </tr>
             @forelse ($user->education as $edu)
+                @php
+                    $eduYears = '-';
+                    if ($edu->start) {
+                        $eduYears = $edu->start . ' - ' . ($edu->end ?: translate('Present'));
+                    } elseif ($edu->end) {
+                        $eduYears = $edu->end;
+                    }
+                @endphp
                 <tr>
                     <td>{{ $edu->degree }}</td>
                     <td>{{ $edu->specialization }}</td>
                     <td>{{ $edu->institution }}</td>
-                    <td>{{ $edu->start }} - {{ $edu->end ?: translate('Present') }}</td>
+                    <td>{{ $eduYears }}</td>
                 </tr>
             @empty
                 <tr><td colspan="4">-</td></tr>
@@ -250,12 +258,33 @@
         <h2 class="section-title">{{ translate('Career') }}</h2>
         <table class="details">
             @forelse ($user->career as $career)
+                @php
+                    $careerTypeLabel = match($career->employment_type ?? 'job') {
+                        'business'      => translate('Business'),
+                        'self_employed' => translate('Self-Employed'),
+                        'not_working'   => translate('Not Working'),
+                        default         => translate('Job'),
+                    };
+                    $careerRole = $career->employment_type === 'business' ? $career->nature_of_business : $career->designation;
+
+                    $careerCurrency = $career->currency ?: 'INR';
+                    $careerIncome = '-';
+                    if ($career->start || $career->end) {
+                        $careerIncome = trim(
+                            ($career->start ? $careerCurrency . ' ' . number_format($career->start) . ' (' . translate('Monthly') . ')' : '')
+                            . ($career->start && $career->end ? '  |  ' : '')
+                            . ($career->end ? $careerCurrency . ' ' . number_format($career->end) . ' (' . translate('Yearly') . ')' : '')
+                        );
+                    }
+                @endphp
                 <tr>
-                    <td class="label">{{ $career->designation ?: ucfirst(str_replace('_', ' ', $career->employment_type)) }}</td>
-                    <td>{{ $career->company }} @if($career->present) ({{ translate('Current') }}) @endif</td>
+                    <td class="label2">{{ $careerTypeLabel }}</td>
+                    <td>{{ $careerRole ?: '-' }}{{ $career->company ? ' - ' . $career->company : '' }} @if($career->present) ({{ translate('Current') }}) @endif</td>
+                    <td class="label2">{{ translate('Income') }}</td>
+                    <td>{{ $careerIncome }}</td>
                 </tr>
             @empty
-                <tr><td colspan="2">-</td></tr>
+                <tr><td colspan="4">-</td></tr>
             @endforelse
         </table>
     @endif
