@@ -25,6 +25,7 @@
                     <label for="drink">{{translate('Drink')}}</label>
                     @php $user_drink = !empty($member->lifestyles->drink) ? $member->lifestyles->drink : ""; @endphp
                     <select class="form-control aiz-selectpicker" name="drink" required>
+                        <option value="" @if($user_drink == '') selected @endif>{{ translate('Select One') }}</option>
                         <option value="yes" @if($user_drink ==  'yes') selected @endif >{{translate('Yes')}}</option>
                         <option value="no" @if($user_drink ==  'no') selected @endif >{{translate('No')}}</option>
                         @error('drink')
@@ -38,6 +39,7 @@
                     <label for="smoke">{{translate('Smoke')}}</label>
                     @php $user_smoke = !empty($member->lifestyles->smoke) ? $member->lifestyles->smoke : ""; @endphp
                     <select class="form-control aiz-selectpicker" name="smoke" required>
+                        <option value="" @if($user_smoke == '') selected @endif>{{ translate('Select One') }}</option>
                         <option value="yes" @if($user_smoke ==  'yes') selected @endif >{{translate('Yes')}}</option>
                         <option value="no" @if($user_smoke ==  'no') selected @endif >{{translate('No')}}</option>
                         @error('smoke')
@@ -48,7 +50,7 @@
                 <div class="col-md-6">
                     <label for="living_with">{{translate('Living With')}}</label>
                     @php $user_living_with = $member->lifestyles->living_with ?? ''; @endphp
-                    <select class="form-control aiz-selectpicker" name="living_with" required>
+                    <select class="form-control aiz-selectpicker" name="living_with">
                         <option value="">{{ translate('Select One') }}</option>
                         <option value="Alone" @if($user_living_with == 'Alone') selected @endif>{{ translate('Alone') }}</option>
                         <option value="With Parents" @if($user_living_with == 'With Parents') selected @endif>{{ translate('With Parents') }}</option>
