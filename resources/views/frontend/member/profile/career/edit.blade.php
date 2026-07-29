@@ -51,7 +51,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Designation')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_designation_{{ $eid }}" class="form-control" value="{{ $empType === 'job' ? $career->designation : '' }}" placeholder="{{translate('e.g. Software Engineer, Manager')}}" required>
+                    <input type="text" id="vis_designation_{{ $eid }}" class="form-control" value="{{ $empType === 'job' ? $career->designation : '' }}" placeholder="{{translate('e.g. Software Engineer, Manager')}}">
                 </div>
             </div>
             <div class="form-group row">
@@ -67,13 +67,13 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Nature of Business')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_nature_{{ $eid }}" class="form-control" value="{{ $career->nature_of_business }}" placeholder="{{translate('e.g. Retail, Manufacturing, IT Services')}}" required>
+                    <input type="text" id="vis_nature_{{ $eid }}" class="form-control" value="{{ $career->nature_of_business }}" placeholder="{{translate('e.g. Retail, Manufacturing, IT Services')}}">
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Business Name')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_company_biz_{{ $eid }}" class="form-control" value="{{ $empType === 'business' ? $career->company : '' }}" placeholder="{{translate('Business / firm name')}}" required>
+                    <input type="text" id="vis_company_biz_{{ $eid }}" class="form-control" value="{{ $empType === 'business' ? $career->company : '' }}" placeholder="{{translate('Business / firm name')}}">
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Nature of Work')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_designation_self_{{ $eid }}" class="form-control" value="{{ $empType === 'self_employed' ? $career->designation : '' }}" placeholder="{{translate('e.g. Freelance Developer, Consultant')}}" required>
+                    <input type="text" id="vis_designation_self_{{ $eid }}" class="form-control" value="{{ $empType === 'self_employed' ? $career->designation : '' }}" placeholder="{{translate('e.g. Freelance Developer, Consultant')}}">
                 </div>
             </div>
             <div class="form-group row">
@@ -146,17 +146,32 @@
         document.querySelector('#income_fields_e' + eid + ' [name="career_end"]').value = monthly ? monthly * 12 : '';
     });
 
-    document.getElementById('career_edit_form_' + eid).addEventListener('submit', function() {
+    document.getElementById('career_edit_form_' + eid).addEventListener('submit', function(e) {
         var type = this.querySelector('[name="employment_type"]:checked').value;
+
+        function requireField(el, label) {
+            if (!el.value.trim()) {
+                e.preventDefault();
+                AIZ.plugins.notify('danger', label + ' ' + '{{ translate("is required") }}');
+                el.focus();
+                return false;
+            }
+            return true;
+        }
+
         if (type === 'job') {
+            if (!requireField(document.getElementById('vis_designation_' + eid), '{{ translate("Designation") }}')) return;
             document.getElementById('h_designation_' + eid).value = document.getElementById('vis_designation_' + eid).value;
             document.getElementById('h_company_' + eid).value     = document.getElementById('vis_company_' + eid).value;
             document.getElementById('h_nature_' + eid).value      = '';
         } else if (type === 'business') {
+            if (!requireField(document.getElementById('vis_nature_' + eid), '{{ translate("Nature of Business") }}')) return;
+            if (!requireField(document.getElementById('vis_company_biz_' + eid), '{{ translate("Business Name") }}')) return;
             document.getElementById('h_designation_' + eid).value = '';
             document.getElementById('h_company_' + eid).value     = document.getElementById('vis_company_biz_' + eid).value;
             document.getElementById('h_nature_' + eid).value      = document.getElementById('vis_nature_' + eid).value;
         } else if (type === 'self_employed') {
+            if (!requireField(document.getElementById('vis_designation_self_' + eid), '{{ translate("Nature of Work") }}')) return;
             document.getElementById('h_designation_' + eid).value = document.getElementById('vis_designation_self_' + eid).value;
             document.getElementById('h_company_' + eid).value     = document.getElementById('vis_company_self_' + eid).value;
             document.getElementById('h_nature_' + eid).value      = '';
