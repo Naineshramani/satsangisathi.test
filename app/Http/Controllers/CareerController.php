@@ -23,7 +23,7 @@ class CareerController extends Controller
         $rules = $this->baseRules;
         if ($type === 'job') {
             $rules['designation'] = ['required', 'max:255'];
-            $rules['company']     = ['required', 'max:255'];
+            $rules['company']     = ['nullable', 'max:255'];
         } elseif ($type === 'business') {
             $rules['nature_of_business'] = ['required', 'max:255'];
             $rules['company']            = ['required', 'max:255'];
@@ -48,7 +48,7 @@ class CareerController extends Controller
         $validator = Validator::make($request->all(), $this->getRules($type));
 
         if ($validator->fails()) {
-            flash(translate('Something went wrong'))->error();
+            flash($validator->errors()->first())->error();
             return Redirect::back();
         }
 
@@ -84,7 +84,7 @@ class CareerController extends Controller
         $validator = Validator::make($request->all(), $this->getRules($type));
 
         if ($validator->fails()) {
-            flash(translate('Something went wrong'))->error();
+            flash($validator->errors()->first())->error();
             return Redirect::back();
         }
 

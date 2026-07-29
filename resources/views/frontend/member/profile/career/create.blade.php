@@ -45,13 +45,13 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Designation')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_designation_c" class="form-control" placeholder="{{translate('e.g. Software Engineer, Manager')}}">
+                    <input type="text" id="vis_designation_c" class="form-control" placeholder="{{translate('e.g. Software Engineer, Manager')}}" required>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Company Name')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_company_c" class="form-control" placeholder="{{translate('Company name')}}">
+                    <input type="text" id="vis_company_c" class="form-control" placeholder="{{translate('Optional')}}">
                 </div>
             </div>
         </div>
@@ -61,13 +61,13 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Nature of Business')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_nature_c" class="form-control" placeholder="{{translate('e.g. Retail, Manufacturing, IT Services')}}">
+                    <input type="text" id="vis_nature_c" class="form-control" placeholder="{{translate('e.g. Retail, Manufacturing, IT Services')}}" required>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Business Name')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_company_biz_c" class="form-control" placeholder="{{translate('Business / firm name')}}">
+                    <input type="text" id="vis_company_biz_c" class="form-control" placeholder="{{translate('Business / firm name')}}" required>
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Nature of Work')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_designation_self_c" class="form-control" placeholder="{{translate('e.g. Freelance Developer, Consultant')}}">
+                    <input type="text" id="vis_designation_self_c" class="form-control" placeholder="{{translate('e.g. Freelance Developer, Consultant')}}" required>
                 </div>
             </div>
             <div class="form-group row">

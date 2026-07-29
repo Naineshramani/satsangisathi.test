@@ -51,13 +51,13 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Designation')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_designation_{{ $eid }}" class="form-control" value="{{ $empType === 'job' ? $career->designation : '' }}" placeholder="{{translate('e.g. Software Engineer, Manager')}}">
+                    <input type="text" id="vis_designation_{{ $eid }}" class="form-control" value="{{ $empType === 'job' ? $career->designation : '' }}" placeholder="{{translate('e.g. Software Engineer, Manager')}}" required>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Company Name')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_company_{{ $eid }}" class="form-control" value="{{ $empType === 'job' ? $career->company : '' }}" placeholder="{{translate('Company name')}}">
+                    <input type="text" id="vis_company_{{ $eid }}" class="form-control" value="{{ $empType === 'job' ? $career->company : '' }}" placeholder="{{translate('Optional')}}">
                 </div>
             </div>
         </div>
@@ -67,13 +67,13 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Nature of Business')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_nature_{{ $eid }}" class="form-control" value="{{ $career->nature_of_business }}" placeholder="{{translate('e.g. Retail, Manufacturing, IT Services')}}">
+                    <input type="text" id="vis_nature_{{ $eid }}" class="form-control" value="{{ $career->nature_of_business }}" placeholder="{{translate('e.g. Retail, Manufacturing, IT Services')}}" required>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Business Name')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_company_biz_{{ $eid }}" class="form-control" value="{{ $empType === 'business' ? $career->company : '' }}" placeholder="{{translate('Business / firm name')}}">
+                    <input type="text" id="vis_company_biz_{{ $eid }}" class="form-control" value="{{ $empType === 'business' ? $career->company : '' }}" placeholder="{{translate('Business / firm name')}}" required>
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label">{{translate('Nature of Work')}}</label>
                 <div class="col-md-9">
-                    <input type="text" id="vis_designation_self_{{ $eid }}" class="form-control" value="{{ $empType === 'self_employed' ? $career->designation : '' }}" placeholder="{{translate('e.g. Freelance Developer, Consultant')}}">
+                    <input type="text" id="vis_designation_self_{{ $eid }}" class="form-control" value="{{ $empType === 'self_employed' ? $career->designation : '' }}" placeholder="{{translate('e.g. Freelance Developer, Consultant')}}" required>
                 </div>
             </div>
             <div class="form-group row">
