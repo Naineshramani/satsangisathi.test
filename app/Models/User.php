@@ -51,12 +51,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function setFirstNameAttribute($value)
     {
-        $this->attributes['first_name'] = $value !== null ? \Illuminate\Support\Str::title(trim($value)) : $value;
+        $this->attributes['first_name'] = $value !== null ? trim($value) : $value;
     }
 
     public function setLastNameAttribute($value)
     {
-        $this->attributes['last_name'] = $value !== null ? \Illuminate\Support\Str::title(trim($value)) : $value;
+        $this->attributes['last_name'] = $value !== null ? trim($value) : $value;
     }
 
     /**
