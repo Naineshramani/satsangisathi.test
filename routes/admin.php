@@ -129,7 +129,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/member-bulk-add/index', 'index')->name('member_bulk_add.index');
         Route::get('/download/on-behalf', 'pdf_download_on_behalf')->name('pdf.on_behalf');
         Route::get('/download/package', 'pdf_download_package')->name('pdf.package');
+        Route::get('/download/reference-lists', 'reference_lists_download')->name('pdf.reference_lists');
         Route::post('/bulk-member-upload', 'bulk_upload')->name('bulk_member_upload');
+        Route::get('/bulk-member-download-failures/{batchId}', 'download_failures')->name('bulk_member.download_failures');
     });
 
     // Premium Packages
