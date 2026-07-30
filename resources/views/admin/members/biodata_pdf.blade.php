@@ -41,13 +41,13 @@
     table.details td { padding: 0.6mm 2mm; vertical-align: top; font-family: 'DejaVuSans', sans-serif; font-size: 9pt; font-weight: normal; color: #4a2e00; }
     table.details td.label { width: 34%; color: #7a3e00; font-weight: bold; }
     table.details td.label2 { width: 16%; color: #7a3e00; font-weight: bold; }
-    .identity-box { width: 100%; margin-bottom: 2mm; table-layout: fixed; }
+    .identity-box { width: 100%; margin-bottom: 2mm; }
     .identity-box .photo-cell { width: 32mm; vertical-align: top; }
     .identity-box .photo-cell img {
         border: 1.5px solid #c9a24b;
     }
     .identity-box .name-cell { width: auto; vertical-align: top; padding-left: 4mm; }
-    .identity-details { margin-top: 1mm; }
+    .identity-details { margin-top: 1mm; table-layout: fixed; }
     .identity-details td {
         padding: 0.5mm 1.5mm;
         font-family: 'DejaVuSans', sans-serif;
@@ -56,7 +56,7 @@
         color: #4a2e00;
     }
     .identity-details td.label2 {
-        width: 27%;
+        width: 33%;
         white-space: nowrap;
         font-family: 'DejaVuSans', sans-serif;
         font-size: 9pt;
@@ -116,16 +116,15 @@
 
     <h1 class="name-title">{{ $user->first_name }} {{ $user->last_name }}</h1>
 
-    <table class="identity-box">
-        <tr>
-            <td class="photo-cell">
-                @if (show_profile_picture($user) && $user->photo)
-                    <img src="{{ uploaded_asset($user->photo) }}" width="103" height="122">
-                @else
-                    <img src="{{ static_asset($m->gender == 2 ? 'assets/img/female-avatar-place.png' : 'assets/img/avatar-place.png') }}" width="103" height="122">
-                @endif
-            </td>
-            <td class="name-cell">
+    <div class="identity-box" style="overflow:hidden;">
+        <div class="photo-cell" style="float:left; width:32mm;">
+            @if (show_profile_picture($user) && $user->photo)
+                <img src="{{ uploaded_asset($user->photo) }}" width="103" height="122">
+            @else
+                <img src="{{ static_asset($m->gender == 2 ? 'assets/img/female-avatar-place.png' : 'assets/img/avatar-place.png') }}" width="103" height="122">
+            @endif
+        </div>
+        <div class="name-cell" style="margin-left:36mm;">
                 <table class="details identity-details">
                     @foreach ($identity_rows as $pair)
                         <tr>
@@ -141,9 +140,8 @@
                         </tr>
                     @endforeach
                 </table>
-            </td>
-        </tr>
-    </table>
+        </div>
+    </div>
 
     @if (!empty($m->introduction))
         <h2 class="section-title">{{ translate('About') }}</h2>
