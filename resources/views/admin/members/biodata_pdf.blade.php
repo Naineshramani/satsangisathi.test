@@ -56,13 +56,16 @@
         color: #4a2e00;
     }
     .identity-details td.label2 {
-        width: 33%;
         white-space: nowrap;
         font-family: 'DejaVuSans', sans-serif;
         font-size: 9pt;
         font-weight: bold;
         color: #7a3e00;
     }
+    .identity-details td.label2-a { width: 28%; }
+    .identity-details td.value-a { width: 24%; }
+    .identity-details td.label2-b { width: 14%; }
+    .identity-details td.value-b { width: 34%; }
     .paragraph { font-family: 'DejaVuSans', sans-serif; font-size: 9pt; text-align: justify; padding: 0.5mm 2mm; }
 </style>
 </head>
@@ -128,14 +131,14 @@
                 <table class="details identity-details">
                     @foreach ($identity_rows as $pair)
                         <tr>
-                            <td class="label2">{{ $pair[0]['label'] }}</td>
-                            <td>{{ $pair[0]['value'] }}</td>
+                            <td class="label2 label2-a">{{ $pair[0]['label'] }}</td>
+                            <td class="value-a">{{ $pair[0]['value'] }}</td>
                             @if (isset($pair[1]))
-                                <td class="label2">{{ $pair[1]['label'] }}</td>
-                                <td>{{ $pair[1]['value'] }}</td>
+                                <td class="label2 label2-b">{{ $pair[1]['label'] }}</td>
+                                <td class="value-b">{{ $pair[1]['value'] }}</td>
                             @else
-                                <td class="label2"></td>
-                                <td></td>
+                                <td class="label2 label2-b"></td>
+                                <td class="value-b"></td>
                             @endif
                         </tr>
                     @endforeach
