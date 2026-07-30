@@ -1,7 +1,7 @@
 @php
     $footer_phones = collect(json_decode(get_setting('footer_phones') ?? '[]'))->implode(' / ');
 @endphp
-<div style="width:100%; background:#ffffff; border-top:1px solid #c9a24b; padding-top:2mm;">
+<div style="width:100%; background:#ffffff; border-top:1px solid #c9a24b; padding-top:2mm; font-family:'DejaVuSans', sans-serif;">
     <table style="width:100%;">
         <tr>
             <td style="width:16mm; text-align:left; vertical-align:middle;">

@@ -19,6 +19,7 @@
         padding: 4mm 5mm;
     }
     h2.section-title {
+        font-family: 'DejaVuSans', sans-serif;
         background: #f2e2b6;
         color: #7a3e00;
         border-left: 3px solid #8b0000;
@@ -27,6 +28,7 @@
         margin: 3mm 0 1.5mm 0;
     }
     h1.name-title {
+        font-family: 'DejaVuSans', sans-serif;
         background: #f2e2b6;
         color: #7a3e00;
         border-left: 3px solid #8b0000;
