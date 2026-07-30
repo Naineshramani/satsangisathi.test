@@ -38,7 +38,7 @@
         margin: 0 0 2mm 0;
     }
     table.details { width: 100%; border-collapse: collapse; margin-bottom: 1mm; }
-    table.details td { padding: 0.6mm 2mm; vertical-align: top; font-size: 9pt; }
+    table.details td { padding: 0.6mm 2mm; vertical-align: top; font-family: 'DejaVuSans', sans-serif; font-size: 9pt; font-weight: normal; color: #4a2e00; }
     table.details td.label { width: 34%; color: #7a3e00; font-weight: bold; }
     table.details td.label2 { width: 16%; color: #7a3e00; font-weight: bold; }
     .identity-box { width: 100%; margin-bottom: 2mm; table-layout: fixed; }
@@ -48,9 +48,22 @@
     }
     .identity-box .name-cell { width: auto; vertical-align: top; padding-left: 4mm; }
     .identity-details { margin-top: 1mm; }
-    .identity-details td { padding: 0.5mm 1.5mm; }
-    .identity-details td.label2 { width: 27%; white-space: nowrap; }
-    .paragraph { font-size: 9pt; text-align: justify; padding: 0.5mm 2mm; }
+    .identity-details td {
+        padding: 0.5mm 1.5mm;
+        font-family: 'DejaVuSans', sans-serif;
+        font-size: 9pt;
+        font-weight: normal;
+        color: #4a2e00;
+    }
+    .identity-details td.label2 {
+        width: 27%;
+        white-space: nowrap;
+        font-family: 'DejaVuSans', sans-serif;
+        font-size: 9pt;
+        font-weight: bold;
+        color: #7a3e00;
+    }
+    .paragraph { font-family: 'DejaVuSans', sans-serif; font-size: 9pt; text-align: justify; padding: 0.5mm 2mm; }
 </style>
 </head>
 <body>
