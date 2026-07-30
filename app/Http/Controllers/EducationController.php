@@ -13,7 +13,7 @@ class EducationController extends Controller
     {
         $this->rules = [
             'degree'          => [ 'required','max:255'],
-            'institution'     => [ 'required','max:255'],
+            'institution'     => [ 'nullable','max:255'],
             'education_start' => [ 'nullable','numeric'],
             'education_end'   => [ 'nullable','numeric'],
         ];
@@ -41,7 +41,7 @@ class EducationController extends Controller
         $education->user_id     = $request->user_id;
         $education->degree          = $request->degree;
         $education->specialization  = $request->specialization ?: null;
-        $education->institution     = $request->institution;
+        $education->institution     = $request->institution ?: null;
         $education->start           = $request->education_start;
         $education->end             = $request->education_end;
 
@@ -77,7 +77,7 @@ class EducationController extends Controller
         $education              = Education::findOrFail($id);
         $education->degree          = $request->degree;
         $education->specialization  = $request->specialization ?: null;
-        $education->institution     = $request->institution;
+        $education->institution     = $request->institution ?: null;
         $education->start           = $request->education_start;
         $education->end             = $request->education_end;
 

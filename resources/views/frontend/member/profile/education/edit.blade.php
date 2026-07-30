@@ -27,7 +27,7 @@
         <div class="form-group row">
             <label class="col-md-3 col-form-label">{{translate('Institution')}}</label>
             <div class="col-md-9">
-                <input type="text" name="institution" value="{{$education->institution}}"  placeholder="{{ translate('Institution') }}" class="form-control" required>
+                <input type="text" name="institution" value="{{$education->institution}}"  placeholder="{{ translate('Institution') }}" class="form-control">
             </div>
         </div>
         <div class="form-group row">
