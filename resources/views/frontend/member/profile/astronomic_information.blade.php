@@ -29,7 +29,7 @@
                         </select>
                         <select id="tob_min" class="form-control" style="width:80px;">
                             <option value="">MM</option>
-                            @for($m = 0; $m < 60; $m += 5)
+                            @for($m = 0; $m < 60; $m += 1)
                                 <option value="{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}"
                                     {{ $tob_min === str_pad($m, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
                                     {{ str_pad($m, 2, '0', STR_PAD_LEFT) }}
