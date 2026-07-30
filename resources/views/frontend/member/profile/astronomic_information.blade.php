@@ -93,7 +93,7 @@
                             };
                         }
                     @endphp
-                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#1b1b28;">
                         <span>{{ $user_sun_sign ? translate($sun_sign_labels[$user_sun_sign]) : '—' }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>

@@ -28,13 +28,13 @@
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label>{{ translate('Candidate Mobile No') }}</label>
-                        <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                        <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#1b1b28;">
                             <span>{{ Auth::user()->phone ?? '—' }}</span><i class="las la-lock ml-2"></i>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label>{{ translate('Email Address') }}</label>
-                        <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                        <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#1b1b28;">
                             <span>{{ Auth::user()->email ?? '—' }}</span><i class="las la-lock ml-2"></i>
                         </div>
                     </div>

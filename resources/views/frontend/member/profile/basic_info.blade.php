@@ -16,13 +16,13 @@
             <div class="form-group row">
                 <div class="col-md-6">
                     <label>{{translate('First Name')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#1b1b28;">
                         <span>{{ $member->first_name }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label>{{translate('Last Name')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#1b1b28;">
                         <span>{{ $member->last_name }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
@@ -31,13 +31,13 @@
             <div class="form-group row">
                 <div class="col-md-4">
                     <label>{{translate('Gender')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#1b1b28;">
                         <span>{{ $member->member->gender == 1 ? translate('Male') : translate('Female') }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label>{{translate('Date Of Birth')}}</label>
-                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#888;">
+                    <div class="form-control bg-light d-flex align-items-center justify-content-between" style="color:#1b1b28;">
                         <span>{{ !empty($member->member->birthday) ? date('d M Y', strtotime($member->member->birthday)) : '—' }}</span><i class="las la-lock ml-2"></i>
                     </div>
                 </div>
