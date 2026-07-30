@@ -513,6 +513,7 @@ class MemberController extends Controller
             'height'        => ['nullable', 'string', 'max:10'],
             'weight'        => ['nullable', 'numeric'],
             'disability'    => ['nullable', 'max:255'],
+            'email'         => ['nullable', 'email', 'max:255', 'unique:users,email,' . $id],
         ];
         $this->messages = [
             'first_name.required'             => translate('First Name is required'),
@@ -524,6 +525,8 @@ class MemberController extends Controller
             // 'on_behalf.required'              => translate('On Behalf is required'),
             'marital_status.required'         => translate('Marital Status is required'),
             'annual_salary_range.required'         => translate('Marital Status is required'),
+            'email.email'                      => translate('Enter a valid email address'),
+            'email.unique'                      => translate('This email is already in use by another member'),
         ];
 
         $rules = $this->rules;
@@ -542,6 +545,10 @@ class MemberController extends Controller
         $user               = User::findOrFail($request->id);
         $user->first_name   = $request->first_name;
         $user->last_name    = $request->last_name;
+
+        if ($request->has('email')) {
+            $user->email = $request->email ?: null;
+        }
 
         if (get_setting('profile_picture_approval_by_admin') && $request->photo != $user->photo && auth()->user()->user_type == 'member') {
             $user->photo_approved = 0;
